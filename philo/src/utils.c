@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 14:50:27 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/21 15:21:03 by mtice            ###   ########.fr       */
+/*   Updated: 2025/10/23 10:31:08 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ long	ft_atol(const char *s)
 		if (s[i] >= '0' && s[i] <= '9')
 			number = number * 10 + (s[i] - '0');
 		else
-			break;
+			break ;
 		i++;
 	}
 	return (number * sign);
