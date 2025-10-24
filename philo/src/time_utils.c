@@ -12,11 +12,6 @@
 
 #include "philo.h"
 
-// #include <time.h>
-// #include <stdio.h>
-// #include <unistd.h>
-// #include <sys/time.h>
-//
 time_t	start_time(void)
 {
 	struct timeval	tv;

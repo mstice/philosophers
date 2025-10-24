@@ -16,32 +16,17 @@
 # include <pthread.h>
 # include <time.h>
 
-typedef enum e_state
-{
-	UNDEFINED,
-	SLEEPING,
-	HUNGRY,
-	EATING,
-	DEAD
-}				t_state;
+typedef struct s_philo	t_philo;
+typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
 	pthread_t		thread;
 	int				index;
-	int				n_philo;
-	int				to_die;
-	int				to_eat;
-	int				to_sleep;
-	int				must_eat;
 	time_t			start_time;
 	time_t			last_meal;
 	int				meals;
-	int				alive;
-	pthread_mutex_t	output;
-	pthread_mutex_t	r_fork;
-	pthread_mutex_t	l_fork;
-	pthread_mutex_t	state;
+	t_data			*all;
 }				t_philo;
 
 typedef struct s_data
@@ -52,6 +37,11 @@ typedef struct s_data
 	int				to_eat;
 	int				to_sleep;
 	int				must_eat;
+	int				stop;
+	pthread_mutex_t	state;
+	pthread_mutex_t	meals; //meals
+	pthread_mutex_t	r_fork;
+	pthread_mutex_t	l_fork;
 }				t_data;
 
 #endif

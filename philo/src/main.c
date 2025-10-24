@@ -20,6 +20,11 @@ static void	init_data(t_data *all)
 	all->to_eat = 0;
 	all->to_sleep = 0;
 	all->must_eat = 0;
+	all->stop = false;
+	pthread_mutex_init(&(all->state), NULL);
+	pthread_mutex_init(&(all->meals), NULL);
+	pthread_mutex_init(&(all->r_fork), NULL);
+	pthread_mutex_init(&(all->l_fork), NULL);
 }
 
 int	main(int argc, char *argv[])

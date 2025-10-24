@@ -24,16 +24,9 @@ static void	free_philos(t_data *all)
 
 void	free_data(t_data *all)
 {
-	int	i;
-
-	i = 0;
-	while (all->philos[i] != NULL)
-	{
-		pthread_mutex_destroy(&(all->philos[i]->output));
-		pthread_mutex_destroy(&(all->philos[i]->l_fork));
-		pthread_mutex_destroy(&(all->philos[i]->r_fork));
-		pthread_mutex_destroy(&(all->philos[i]->state));
-		i++;
-	}
+	pthread_mutex_destroy(&(all->meals));
+	pthread_mutex_destroy(&(all->l_fork));
+	pthread_mutex_destroy(&(all->r_fork));
+	pthread_mutex_destroy(&(all->state));
 	free_philos(all);
 }

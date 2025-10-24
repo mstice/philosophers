@@ -23,19 +23,19 @@ int	create_philos(t_data *all)
 	{
 		philos[i] = malloc(sizeof(t_philo) * 1);
 		philos[i]->index = i + 1;
-		philos[i]->n_philo = all->n_philo;
-		philos[i]->to_die = all->to_die;
-		philos[i]->to_eat = all->to_eat;
-		philos[i]->to_sleep = all->to_sleep;
-		philos[i]->must_eat = all->must_eat;
+		// philos[i]->n_philo = all->n_philo;
+		// philos[i]->to_die = all->to_die;
+		// philos[i]->to_eat = all->to_eat;
+		// philos[i]->to_sleep = all->to_sleep;
+		// philos[i]->must_eat = all->must_eat;
 		philos[i]->start_time = 0;
 		philos[i]->last_meal = 0;
 		philos[i]->meals = 0;
-		philos[i]->alive = true;
-		pthread_mutex_init(&(philos[i]->output), NULL);
-		pthread_mutex_init(&(philos[i]->r_fork), NULL);
-		pthread_mutex_init(&(philos[i]->l_fork), NULL);
-		pthread_mutex_init(&(philos[i]->state), NULL);
+		philos[i]->all = all;
+		// pthread_mutex_init(&(philos[i]->output), NULL);
+		// pthread_mutex_init(&(philos[i]->r_fork), NULL);
+		// pthread_mutex_init(&(philos[i]->l_fork), NULL);
+		// pthread_mutex_init(&(philos[i]->state), NULL);
 	}
 	philos[all->n_philo] = NULL;
 	return (all->philos = philos, 0);
