@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   threads3.c                                         :+:      :+:    :+:   */
+/*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,6 +11,19 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// static int	undead(t_data *all)
+// {
+// 	int	ret;
+//
+// 	pthread_mutex_lock(&(all->state));
+// 	if (all->stop == true)
+// 		ret = 0;
+// 	else
+// 		ret = 1;
+// 	pthread_mutex_unlock(&(all->state));
+// 	return (ret);
+// }
 
 static void alone_routine(t_philo *which_philo)
 {
@@ -31,32 +44,18 @@ static void	*philo_routine(void *arg)
 	if (all->n_philo == 1)
 		return (alone_routine(which_philo), NULL);
 	if (which_philo->index % 2 == 0)
-		usleep(1);
-	while (42)
+		usleep(100);
+	pthread_mutex_lock(&(all->meals));
+	which_philo->start_time = start_time();
+	which_philo->last_meal = start_time();
+	pthread_mutex_unlock(&(all->meals));
+	while (undead(all))
 	{
 		printf("%-5zu %2d is thinking\n", time_now(which_philo->start_time), which_philo->index);
-
-		// pthread_mutex_lock(&(all->state));
-		// if (all->stop)
-		// {
-		// 	pthread_mutex_unlock(&(all->state));
-		// 	break;
-		// }
-		// pthread_mutex_unlock(&(all->state));
-		// if (which_philo->index == 1)
-		// {
-		// 	pthread_mutex_lock(&(all->l_fork));
-		// 	printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
-		// 	pthread_mutex_lock(&(all->r_fork));
-		// 	printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
-		// }
-		// else
-		// {
-			pthread_mutex_lock(&(all->r_fork));
-			printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
-			pthread_mutex_lock(&(all->l_fork));
-			printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
-		// }
+		pthread_mutex_lock(&(all->l_fork));
+		printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
+		pthread_mutex_lock(&(all->r_fork));
+		printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
 		pthread_mutex_lock(&(all->meals));
 		which_philo->last_meal = time_now(which_philo->start_time);
 		which_philo->meals += 1;
@@ -85,13 +84,6 @@ static void	*waiter_routine(void *arg)
 		i = 0;
 		while (i < all->n_philo)
 		{
-			// pthread_mutex_lock(&(all->state));
-			// if (all->stop == true)
-			// {
-			// 	pthread_mutex_unlock(&(all->state));
-			// 	return (NULL);
-			// }
-			// pthread_mutex_unlock(&(all->state));
 			pthread_mutex_lock(&(all->meals));
 			if ((time_now(all->philos[i]->start_time)) - all->philos[i]->last_meal >= all->to_die)
 			{
@@ -121,10 +113,6 @@ int	start_dinner(t_data *all)
 	i = -1;
 	while (++i < all->n_philo)
 	{
-		all->philos[i]->start_time = start_time();
-		pthread_mutex_lock(&(all->meals));
-		all->philos[i]->last_meal = time_now(all->philos[i]->start_time);
-		pthread_mutex_unlock(&(all->meals));
 		if (pthread_create(&(all->philos[i]->thread), NULL, &philo_routine, all->philos[i]))
 			return (printf(ERR_THREAD), 1);
 	}

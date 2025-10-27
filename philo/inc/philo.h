@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 19:25:21 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/23 11:35:09 by mtice            ###   ########.fr       */
+/*   Updated: 2025/10/27 17:49:39 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@
 # include <limits.h>
 # include <stdbool.h>
 
+//init_utils.c
+void	init_data(t_data *all);
+int		init_philos(t_data *all);
+int		init_forks(t_data *all);
+
 //input_check.c
 int		input_check(int argc, char *argv[]);
 int		parse_input(t_data *all, char *argv[]);
@@ -32,6 +37,7 @@ int		create_philos(t_data *all);
 
 //threads.c
 int		start_dinner(t_data *all);
+
 
 //utils.c
 int		ft_putstr_fd(char *s, int fd);

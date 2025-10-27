@@ -6,40 +6,11 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 14:37:28 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/23 14:32:41 by mtice            ###   ########.fr       */
+/*   Updated: 2025/10/27 18:58:15 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	create_philos(t_data *all)
-{
-	t_philo	**philos;
-	int		i;
-
-	philos = malloc(sizeof(t_philo *) * (all->n_philo + 1));
-	i = -1;
-	while (++i < all->n_philo)
-	{
-		philos[i] = malloc(sizeof(t_philo) * 1);
-		philos[i]->index = i + 1;
-		// philos[i]->n_philo = all->n_philo;
-		// philos[i]->to_die = all->to_die;
-		// philos[i]->to_eat = all->to_eat;
-		// philos[i]->to_sleep = all->to_sleep;
-		// philos[i]->must_eat = all->must_eat;
-		philos[i]->start_time = 0;
-		philos[i]->last_meal = 0;
-		philos[i]->meals = 0;
-		philos[i]->all = all;
-		// pthread_mutex_init(&(philos[i]->output), NULL);
-		// pthread_mutex_init(&(philos[i]->r_fork), NULL);
-		// pthread_mutex_init(&(philos[i]->l_fork), NULL);
-		// pthread_mutex_init(&(philos[i]->state), NULL);
-	}
-	philos[all->n_philo] = NULL;
-	return (all->philos = philos, 0);
-}
 
 int	parse_input(t_data *all, char *argv[])
 {

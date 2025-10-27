@@ -10,6 +10,7 @@ SRC_DIR := src
 OBJ_DIR := obj
 
 SRC := $(SRC_DIR)/main.c \
+	   $(SRC_DIR)/init_utils.c \
 	   $(SRC_DIR)/input_check.c \
 	   $(SRC_DIR)/threads.c \
 	   $(SRC_DIR)/utils.c \

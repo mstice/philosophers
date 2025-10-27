@@ -12,12 +12,18 @@
 
 #include "philo.h"
 
+#include <stdio.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <stdlib.h>
+
 time_t	start_time(void)
 {
 	struct timeval	tv;
 
-	if (gettimeofday(&tv, NULL) == -1)
-		ft_putstr_fd(ERR_TIME, 2);
+	gettimeofday(&tv, NULL);
+	// if (gettimeofday(&tv, NULL) == -1)
+	// 	ft_putstr_fd(ERR_TIME, 2);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
@@ -25,8 +31,9 @@ time_t	time_now(time_t start_time)
 {
 	struct	timeval	tv;
 
-	if (gettimeofday(&tv, NULL) == -1)
-		ft_putstr_fd(ERR_TIME, 2);
+	gettimeofday(&tv, NULL);
+	// if (gettimeofday(&tv, NULL) == -1)
+	// 	ft_putstr_fd(ERR_TIME, 2);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000 - start_time);
 }
 
@@ -43,9 +50,9 @@ time_t	time_now(time_t start_time)
 // 	time_t	start;
 // 	time_t	end;
 //
-// 	start = time_ms();
+// 	start = start_time();
 // 	usleep(100 * 1000);
-// 	end = get_time(start);
+// 	end = time_now(start);
 // 	printf("start: %zu, end %zu\n", start, end);
 // 	return (0);
 // }
