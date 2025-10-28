@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int	parse_input(t_data *all, char *argv[])
+static int	update_all(t_data *all, char *argv[])
 {
 	int		j;
 	long	n;
@@ -38,10 +38,30 @@ int	parse_input(t_data *all, char *argv[])
 	return (0);
 }
 
+static int	only_digits(char *argv[])
+{
+	int	j;
+	int	i;
+
+	j = 1;
+	i = 0;
+	while (argv[j])
+	{
+		while (argv[j][i])
+		{
+			if (!ft_isdigit(argv[j][i]))
+				return (ft_putstr_fd(ERR_ARGS, 2), 1);
+			i++;
+		}
+		j++;
+	}
+	return (0);
+}
+
 //------------------------------------------------------------------------------
 //checks if input is correct
 //TODO: check through argv to check all strings are numbers
-int	input_check(int argc, char *argv[])
+static int	input_check(int argc)
 {
 	if (argc < 5)
 		return (ft_putendl_fd("Insufficient args!", 2),
@@ -53,6 +73,16 @@ int	input_check(int argc, char *argv[])
 			ft_putendl_fd("Usage: ./philo [number_of_philosophers] [time_to_die] \
 [time_to_eat] [time_to_sleep] (optional) \
 [number_of_times_each_philosopher_must_eat]", 2), 1);
-	(void)argv;
+	return (0);
+}
+
+int	parse_input(int argc, char *argv[], t_data *all)
+{
+	if (input_check(argc))
+		return (1);
+	if (only_digits(argv))
+		return (1);
+	if (update_all(all, argv))
+		return (1);
 	return (0);
 }

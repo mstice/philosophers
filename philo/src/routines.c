@@ -6,11 +6,25 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 10:34:55 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/23 14:34:20 by mtice            ###   ########.fr       */
+/*   Updated: 2025/10/28 12:08:48 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	ft_usleep(size_t mls)
+{
+	size_t	start;
+
+	start = get_time_ms();
+	while (get_time_ms() - start < mls)
+		usleep (500);
+}
+
+static time_t	time_now(time_t start_time)
+{
+	return (get_time_ms() - start_time);
+}
 
 // static int	undead(t_data *all)
 // {
@@ -27,13 +41,14 @@
 
 static void alone_routine(t_philo *which_philo)
 {
+	pthread_mutex_lock(&(which_philo->all->state));
 	printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
-	usleep(which_philo->all->to_die * 1000);
+	pthread_mutex_unlock(&(which_philo->all->state));
+	ft_usleep(which_philo->all->to_die);
 }
 
 //-----------------------------------------------------------------------------
 //get time_ms() to be accurate
-//TODO: write a function for only one philosopher b4 while loop
 static void	*philo_routine(void *arg)
 {
 	t_philo	*which_philo;
@@ -44,29 +59,35 @@ static void	*philo_routine(void *arg)
 	if (all->n_philo == 1)
 		return (alone_routine(which_philo), NULL);
 	if (which_philo->index % 2 == 0)
-		usleep(100);
-	pthread_mutex_lock(&(all->meals));
-	which_philo->start_time = start_time();
-	which_philo->last_meal = start_time();
-	pthread_mutex_unlock(&(all->meals));
-	while (undead(all))
+		ft_usleep(1);
+	while (42)
 	{
-		printf("%-5zu %2d is thinking\n", time_now(which_philo->start_time), which_philo->index);
-		pthread_mutex_lock(&(all->l_fork));
+		//printf("%-5zu %2d is thinking\n", time_now(which_philo->start_time), which_philo->index);
+		pthread_mutex_lock(which_philo->forks.left_f);
+		pthread_mutex_lock(&(all->state));
 		printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
-		pthread_mutex_lock(&(all->r_fork));
+		pthread_mutex_unlock(&(all->state));
+		pthread_mutex_lock(which_philo->forks.right_f);
+		pthread_mutex_lock(&(all->state));
 		printf("%-5zu %2d has taken a fork\n", time_now(which_philo->start_time), which_philo->index);
+		pthread_mutex_unlock(&(all->state));
 		pthread_mutex_lock(&(all->meals));
-		which_philo->last_meal = time_now(which_philo->start_time);
+		pthread_mutex_lock(&(all->state));
+		printf("%-5zu %2d is eating\n", time_now(which_philo->start_time), which_philo->index);
+		pthread_mutex_unlock(&(all->state));
+		which_philo->last_meal = get_time_ms();
 		which_philo->meals += 1;
 		pthread_mutex_unlock(&(all->meals));
-		printf("%-5zu %2d is eating\n", time_now(which_philo->start_time), which_philo->index);
-		usleep(all->to_eat * 1000);
-		pthread_mutex_unlock(&(all->l_fork));
-		pthread_mutex_unlock(&(all->r_fork));
+		ft_usleep(all->to_eat);
+		pthread_mutex_unlock(which_philo->forks.left_f);
+		pthread_mutex_unlock(which_philo->forks.right_f);
+		pthread_mutex_lock(&(all->state));
 		printf("%-5zu %2d is sleeping\n", time_now(which_philo->start_time), which_philo->index);
-		usleep(all->to_sleep * 1000);
-		// printf("%-5zu %2d is thinking\n", time_now(which_philo->start_time), which_philo->index);
+		pthread_mutex_unlock(&(all->state));
+		ft_usleep(all->to_sleep);
+		pthread_mutex_lock(&(all->state));
+		printf("%-5zu %2d is thinking\n", time_now(which_philo->start_time), which_philo->index);
+		pthread_mutex_unlock(&(all->state));
 	}
 	return (NULL);
 }
@@ -85,13 +106,16 @@ static void	*waiter_routine(void *arg)
 		while (i < all->n_philo)
 		{
 			pthread_mutex_lock(&(all->meals));
-			if ((time_now(all->philos[i]->start_time)) - all->philos[i]->last_meal >= all->to_die)
+			if (get_time_ms() - all->philos[i]->last_meal >= all->to_die)
 			{
 				pthread_mutex_unlock(&(all->meals));
+				// pthread_mutex_lock(&(all->state));
+				//all->stop = true;
+				// pthread_mutex_unlock(&(all->state));
 				pthread_mutex_lock(&(all->state));
-				all->stop = true;
+				printf("%-5ld %2d died\n", time_now(all->philos[i]->start_time), all->philos[i]->index); //printing the wrong time
 				pthread_mutex_unlock(&(all->state));
-				printf("%-5zu %2d died\n", time_now(all->philos[i]->start_time), all->philos[i]->index); //printing the wrong time
+				pthread_mutex_lock(&(all)->state);
 				return (NULL);
 			}
 			pthread_mutex_unlock(&(all->meals));

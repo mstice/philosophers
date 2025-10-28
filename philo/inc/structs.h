@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 14:09:38 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/27 18:58:17 by mtice            ###   ########.fr       */
+/*   Updated: 2025/10/28 12:08:49 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ typedef struct s_data	t_data;
 
 typedef struct s_forks
 {
-	pthread_mutex_t	right_f;
-	pthread_mutex_t	left_f;
+	pthread_mutex_t	*right_f;
+	pthread_mutex_t	*left_f;
 }				t_forks;
 
 typedef struct s_philo
@@ -33,6 +33,7 @@ typedef struct s_philo
 	time_t			start_time;
 	time_t			last_meal;
 	int				meals;
+	t_forks			forks;
 	t_data			*all;
 }				t_philo;
 
@@ -47,8 +48,7 @@ typedef struct s_data
 	int				stop;
 	pthread_mutex_t	state;
 	pthread_mutex_t	meals; //meals
-	// pthread_mutex_t	r_fork;
-	// pthread_mutex_t	l_fork;
+	pthread_mutex_t	*cutlery;
 }				t_data;
 
 #endif

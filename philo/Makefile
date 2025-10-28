@@ -12,10 +12,10 @@ OBJ_DIR := obj
 SRC := $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/init_utils.c \
 	   $(SRC_DIR)/input_check.c \
-	   $(SRC_DIR)/threads.c \
+	   $(SRC_DIR)/routines.c \
 	   $(SRC_DIR)/utils.c \
 	   $(SRC_DIR)/time_utils.c \
-	   $(SRC_DIR)/free_utils.c \
+	   $(SRC_DIR)/free_utils.c 
 
 OBJ := $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
 INCLUDE := inc

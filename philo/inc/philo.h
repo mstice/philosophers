@@ -31,9 +31,7 @@ int		init_philos(t_data *all);
 int		init_forks(t_data *all);
 
 //input_check.c
-int		input_check(int argc, char *argv[]);
-int		parse_input(t_data *all, char *argv[]);
-int		create_philos(t_data *all);
+int		parse_input(int argc, char *argv[], t_data *all);
 
 //threads.c
 int		start_dinner(t_data *all);
@@ -43,10 +41,12 @@ int		start_dinner(t_data *all);
 int		ft_putstr_fd(char *s, int fd);
 int		ft_putendl_fd(char *s, int fd);
 long	ft_atol(const char *s);
+int		ft_isdigit(char c);
 
 //time_utils.c
-time_t	start_time(void);
-time_t	time_now(time_t start_time);
+// time_t	start_time(void);
+// time_t	time_now(time_t start_time);
+time_t	get_time_ms(void);
 
 //free_utils.c
 void	free_data(t_data *all);

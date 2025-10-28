@@ -17,9 +17,9 @@ int	main(int argc, char *argv[])
 	t_data	all;
 
 	init_data(&all);
-	if (input_check(argc, argv) || parse_input(&all, argv))
+	if (parse_input(argc, argv, &all))
 		return (1);
-	if (init_philos(&all))
+	if (init_forks(&all) || init_philos(&all))
 		return (free_data(&all), 1);
 	if (start_dinner(&all))
 		return (free_data(&all), 1);
