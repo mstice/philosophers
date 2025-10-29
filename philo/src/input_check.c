@@ -44,14 +44,15 @@ static int	only_digits(char *argv[])
 	int	i;
 
 	j = 1;
-	i = 0;
-	while (argv[j])
+	while (argv[j] != NULL)
 	{
-		while (argv[j][i])
+		i = 0;
+		while (argv[j][i] != '\0')
 		{
-			if (!ft_isdigit(argv[j][i]))
+			if (ft_isdigit(argv[j][i]))
+				i++;
+			else
 				return (ft_putstr_fd(ERR_ARGS, 2), 1);
-			i++;
 		}
 		j++;
 	}

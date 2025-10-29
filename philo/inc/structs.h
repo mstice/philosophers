@@ -16,9 +16,19 @@
 # include <pthread.h>
 # include <time.h>
 
+typedef enum e_state	t_state;
 typedef struct s_forks	t_forks;
 typedef struct s_philo	t_philo;
 typedef struct s_data	t_data;
+
+typedef enum e_state
+{
+	THINK,
+	FORK,
+	EAT,
+	SLEEP,
+	DEAD
+}			t_state;
 
 typedef struct s_forks
 {
@@ -49,6 +59,7 @@ typedef struct s_data
 	pthread_mutex_t	state;
 	pthread_mutex_t	meals; //meals
 	pthread_mutex_t	*cutlery;
+	pthread_mutex_t	over;
 }				t_data;
 
 #endif

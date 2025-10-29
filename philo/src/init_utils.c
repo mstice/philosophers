@@ -65,7 +65,7 @@ int	init_philos(t_data *all)
 		if (i == 0)
 			philos[i]->forks.right_f = &(all->cutlery[all->n_philo - 1]);
 		else
-			philos[i]->forks.right_f = &(all->cutlery[i]);
+			philos[i]->forks.right_f = &(all->cutlery[i - 1]);
 	}
 	philos[all->n_philo] = NULL;
 	return (all->philos = philos, 0);
