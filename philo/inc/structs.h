@@ -47,7 +47,6 @@ typedef struct s_philo
 	t_data			*all;
 }				t_philo;
 
-//TODO: remove stop
 typedef struct s_data
 {
 	t_philo			**philos;

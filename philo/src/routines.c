@@ -41,11 +41,12 @@ static int	all_eat(t_data *all)
 	i = 0;
 	while (i < all->n_philo)
 	{
-		if (all->philos[i]->meals == all->must_eat)
+		if (all->philos[i]->meals >= all->must_eat)
 			i++;
 		else
 			return (0);
 	}
+	pthread_mutex_lock(&(all->state));
 	return (1);
 }
 
@@ -58,9 +59,10 @@ static void	*philo_routine(void *arg)
 	which_philo = (t_philo *)arg;
 	all = which_philo->all;
 	if (which_philo->index % 2 == 0)
-		ft_usleep(1);
+		usleep(100);
 	while (42)
 	{
+		print_state(all, which_philo, THINK);//, usleep(10);
 		pthread_mutex_lock(which_philo->forks.left_f);
 		print_state(all, which_philo, FORK);
 		pthread_mutex_lock(which_philo->forks.right_f);
@@ -74,7 +76,7 @@ static void	*philo_routine(void *arg)
 		pthread_mutex_unlock(which_philo->forks.left_f);
 		pthread_mutex_unlock(which_philo->forks.right_f);
 		(print_state(all, which_philo, SLEEP), ft_usleep(all->to_sleep));
-		print_state(all, which_philo, THINK);
+		//print_state(all, which_philo, THINK);
 	}
 	return (NULL);
 }
@@ -103,7 +105,7 @@ static void	*waiter_routine(void *arg)
 			pthread_mutex_unlock(&(all->meals));
 			i++;
 		}
-		if (all_eat(all))
+		if (all->must_eat > 0 && all_eat(all))
 			return (NULL);
 	}
 	return (NULL);
@@ -125,12 +127,16 @@ int	start_dinner(t_data *all)
 			return (ft_putstr_fd(ERR_CREATE, 2), 1);
 	}
 	i = -1;
+	if (pthread_join(waiter, NULL))
+		return (ft_putstr_fd(ERR_JOIN, 2), 1);
 	while (++i < all->n_philo)
 	{
 		if (pthread_detach(all->philos[i]->thread))
 			return (ft_putstr_fd(ERR_DETACH, 2), 1);
+		// if (pthread_join(all->philos[i]->thread, NULL))
+		// 	return (ft_putstr_fd(ERR_JOIN, 2), 1);
 	}
-	if (pthread_join(waiter, NULL))
-		return (ft_putstr_fd(ERR_JOIN, 2), 1);
+	// if (pthread_join(waiter, NULL))
+	// 	return (ft_putstr_fd(ERR_JOIN, 2), 1);
 	return (0);
 }

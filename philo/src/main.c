@@ -23,7 +23,7 @@ int	main(int argc, char *argv[])
 		return (free_data(&all), 1);
 	if (start_dinner(&all))
 		return (free_data(&all), 1);
-	printf("dinner is over!\n");
+	//printf("dinner is over!\n");
 	free_data(&all);
 	return (0);
 }

@@ -31,5 +31,5 @@ void	ft_usleep(size_t ms)
 
 	start = time_ms();
 	while (time_ms() - start < ms)
-		usleep (500);
+		usleep (100);
 }
