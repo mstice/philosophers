@@ -47,6 +47,7 @@ typedef struct s_philo
 	t_data			*all;
 }				t_philo;
 
+//TODO: remove stop
 typedef struct s_data
 {
 	t_philo			**philos;
@@ -55,9 +56,9 @@ typedef struct s_data
 	int				to_eat;
 	int				to_sleep;
 	int				must_eat;
-	int				stop;
+	// int				stop;
 	pthread_mutex_t	state;
-	pthread_mutex_t	meals; //meals
+	pthread_mutex_t	meals;
 	pthread_mutex_t	*cutlery;
 	pthread_mutex_t	over;
 }				t_data;

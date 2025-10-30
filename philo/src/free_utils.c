@@ -12,6 +12,16 @@
 
 #include "philo.h"
 
+static void	destroy_cutlery(t_data *all)
+{
+	int	i;
+
+	i = -1;
+	while (++i < all->n_philo)
+		pthread_mutex_destroy(&(all->cutlery[i]));
+	free(all->cutlery);
+}
+
 static void	free_philos(t_data *all)
 {
 	int	i;
@@ -24,12 +34,7 @@ static void	free_philos(t_data *all)
 
 void	free_data(t_data *all)
 {
-	int	i;
-
-	i = -1;
-	while (++i < all->n_philo)
-		pthread_mutex_destroy(&(all->cutlery[i]));
-	free(all->cutlery);
+	destroy_cutlery(all);
 	pthread_mutex_destroy(&(all->meals));
 	pthread_mutex_destroy(&(all->state));
 	free_philos(all);

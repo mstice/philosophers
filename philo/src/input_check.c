@@ -12,6 +12,8 @@
 
 #include "philo.h"
 
+//-----------------------------------------------------------------------------
+//parses the argv inputs into the t_data struct
 static int	update_all(t_data *all, char *argv[])
 {
 	int		j;
@@ -38,6 +40,8 @@ static int	update_all(t_data *all, char *argv[])
 	return (0);
 }
 
+//-----------------------------------------------------------------------------
+//checks if an arg contains only digits
 static int	only_digits(char *argv[])
 {
 	int	j;
@@ -60,8 +64,7 @@ static int	only_digits(char *argv[])
 }
 
 //------------------------------------------------------------------------------
-//checks if input is correct
-//TODO: check through argv to check all strings are numbers
+//checks correct number of args
 static int	input_check(int argc)
 {
 	if (argc < 5)
@@ -77,6 +80,7 @@ static int	input_check(int argc)
 	return (0);
 }
 
+//-----------------------------------------------------------------------------
 int	parse_input(int argc, char *argv[], t_data *all)
 {
 	if (input_check(argc))

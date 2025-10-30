@@ -12,6 +12,9 @@
 
 #include "philo.h"
 
+//-----------------------------------------------------------------------------
+//initialises t_data struct
+//TODO: remove stop
 void	init_data(t_data *all)
 {
 	all->philos = NULL;
@@ -20,13 +23,15 @@ void	init_data(t_data *all)
 	all->to_eat = 0;
 	all->to_sleep = 0;
 	all->must_eat = 0;
-	all->stop = false;
+	// all->stop = false;
 	pthread_mutex_init(&(all->state), NULL);
 	pthread_mutex_init(&(all->meals), NULL);
 	all->cutlery = NULL;
 }
 
-//TODO: initialise properly
+//-----------------------------------------------------------------------------
+//initialises cutlery, which is an array of mutexes
+//each member represents a fork, and there are as many forks as nbr of philos
 int	init_forks(t_data *all)
 {
 	pthread_mutex_t	*cutlery;
@@ -42,6 +47,8 @@ int	init_forks(t_data *all)
 	return (0);
 }
 
+//-----------------------------------------------------------------------------
+//initialises the t_philo struct
 int	init_philos(t_data *all)
 {
 	t_philo	**philos;
@@ -57,8 +64,8 @@ int	init_philos(t_data *all)
 		if (!philos[i])
 			ft_putendl_fd(ERR_MALLOC, 2);
 		philos[i]->index = i + 1;
-		philos[i]->start_time = get_time_ms();
-		philos[i]->last_meal = get_time_ms();
+		philos[i]->start_time = time_ms();
+		philos[i]->last_meal = time_ms();
 		philos[i]->meals = 0;
 		philos[i]->all = all;
 		philos[i]->forks.left_f = &(all->cutlery[i]);
