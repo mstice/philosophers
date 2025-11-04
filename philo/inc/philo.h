@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 19:25:21 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/27 17:49:39 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/04 14:59:13 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,14 @@ int		init_forks(t_data *all);
 //input_check.c
 int		parse_input(int argc, char *argv[], t_data *all);
 
-//threads.c
+//routines.c
 int		start_dinner(t_data *all);
+
+//routine_utils.c
+void	death(t_data *all);
+int		no_deaths(t_data *all);
+int		all_eat(t_data *all);
+void	print_state(t_data *all, t_philo *philo, t_state action);
 
 //utils.c
 int		ft_putstr_fd(char *s, int fd);
@@ -46,6 +52,7 @@ int		ft_isdigit(char c);
 time_t	time_now(time_t start_time);
 time_t	time_ms(void);
 void	ft_usleep(size_t ms);
+void	sim_start_delay(time_t start_time);
 
 //free_utils.c
 void	free_data(t_data *all);

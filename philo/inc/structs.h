@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 14:09:38 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/28 12:08:49 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/04 14:54:24 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_data
 	int				to_eat;
 	int				to_sleep;
 	int				must_eat;
+	time_t			all_start;
 	bool			stop;
 	pthread_mutex_t	sim_stop;
 	pthread_mutex_t	state;

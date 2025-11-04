@@ -37,5 +37,6 @@ void	free_data(t_data *all)
 	destroy_cutlery(all);
 	pthread_mutex_destroy(&(all->meals));
 	pthread_mutex_destroy(&(all->state));
+	pthread_mutex_destroy(&(all->sim_stop));
 	free_philos(all);
 }

@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 10:24:19 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/23 11:26:28 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/04 14:49:22 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,10 @@ void	ft_usleep(size_t ms)
 	start = time_ms();
 	while (time_ms() - start < ms)
 		usleep (100);
+}
+
+void	sim_start_delay(time_t start_time)
+{
+	while (time_ms() < start_time)
+		continue ;
 }
