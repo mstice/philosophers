@@ -23,7 +23,8 @@ void	init_data(t_data *all)
 	all->to_eat = 0;
 	all->to_sleep = 0;
 	all->must_eat = 0;
-	// all->stop = false;
+	all->stop = false;
+	pthread_mutex_init(&(all->sim_stop), NULL);
 	pthread_mutex_init(&(all->state), NULL);
 	pthread_mutex_init(&(all->meals), NULL);
 	all->cutlery = NULL;

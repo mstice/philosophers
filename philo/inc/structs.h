@@ -14,6 +14,7 @@
 # define STRUCTS_H
 
 # include <pthread.h>
+# include <stdbool.h>
 # include <time.h>
 
 typedef enum e_state	t_state;
@@ -55,7 +56,8 @@ typedef struct s_data
 	int				to_eat;
 	int				to_sleep;
 	int				must_eat;
-	// int				stop;
+	bool			stop;
+	pthread_mutex_t	sim_stop;
 	pthread_mutex_t	state;
 	pthread_mutex_t	meals;
 	pthread_mutex_t	*cutlery;
