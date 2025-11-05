@@ -25,7 +25,7 @@ static void think_routine(t_data *all, t_philo *which_philo, bool silent)
 		time_to_think = 0;
 	if (time_to_think == 0 && silent == true)
 		time_to_think = 1;
-	else if (time_to_think > 600)
+	if (time_to_think > 600)
 		time_to_think = 200;
 	if (!silent)
 		print_state(all, which_philo, THINK);
@@ -74,10 +74,10 @@ static void	*philo_routine(void *arg)
 			print_state(all, which_philo, FORK);
 		}
 		pthread_mutex_lock(&(all->meals));
-		print_state(all, which_philo, EAT);
 		which_philo->last_meal = time_ms();
 		which_philo->meals += 1;
 		pthread_mutex_unlock(&(all->meals));
+		print_state(all, which_philo, EAT);
 		ft_usleep(all->to_eat);
 		pthread_mutex_unlock(which_philo->forks.left_f);
 		pthread_mutex_unlock(which_philo->forks.right_f);

@@ -52,10 +52,10 @@ int	all_eat(t_data *all)
 //-----------------------------------------------------------------------------
 void	print_state(t_data *all, t_philo *philo, t_state action)
 {
-	if (!no_deaths(all))
-		return ;
 	if (action != THINK && action != FORK && action != EAT && action != SLEEP
 		&& action != DEAD)
+		return ;
+	if (!no_deaths(all))
 		return ;
 	pthread_mutex_lock(&(all->state));
 	printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
