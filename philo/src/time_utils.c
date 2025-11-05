@@ -37,5 +37,7 @@ void	ft_usleep(size_t ms)
 void	sim_start_delay(time_t start_time)
 {
 	while (time_ms() < start_time)
-		continue ;
+	{
+		usleep(100);
+	}
 }
