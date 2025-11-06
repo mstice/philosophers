@@ -36,7 +36,7 @@ static void	think_routine(t_data *all, t_philo *philo, bool silent)
 
 static void	alone_routine(t_data *all, t_philo *philo)
 {
-	sim_start_delay(all->all_start);
+	start_delay(all->all_start);
 	pthread_mutex_lock(philo->forks.left_f);
 	print_state(all, philo, FORK);
 	ms_sleep(all->to_die);
@@ -53,7 +53,7 @@ static void	*philo_routine(void *arg)
 	all = philo->all;
 	if (all->n_philo == 1)
 		return (alone_routine(all, philo), NULL);
-	sim_start_delay(all->all_start);
+	start_delay(all->all_start);
 	if (philo->index % 2)
 		think_routine(all, philo, true);
 	while (no_deaths(all))

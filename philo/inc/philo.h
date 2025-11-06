@@ -53,7 +53,7 @@ int		ft_isdigit(char c);
 time_t	time_now(time_t start_time);
 time_t	time_ms(void);
 void	ms_sleep(size_t ms);
-void	sim_start_delay(time_t start_time);
+void	start_delay(time_t start_time);
 void	assign_start_time(t_data *all);
 
 //free_utils.c

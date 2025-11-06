@@ -34,7 +34,7 @@ void	ms_sleep(size_t ms)
 		usleep (100);
 }
 
-void	sim_start_delay(time_t start_time)
+void	start_delay(time_t start_time)
 {
 	while (time_ms() < start_time)
 		usleep(100);
