@@ -25,7 +25,7 @@ time_t	time_ms(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	ft_usleep(size_t ms)
+void	ms_sleep(size_t ms)
 {
 	size_t	start;
 
@@ -37,7 +37,18 @@ void	ft_usleep(size_t ms)
 void	sim_start_delay(time_t start_time)
 {
 	while (time_ms() < start_time)
-	{
 		usleep(100);
+}
+
+void	assign_start_time(t_data *all)
+{
+	int	i;
+
+	all->all_start = time_ms() + (all->n_philo * 2 * 10);
+	i = -1;
+	while (++i < all->n_philo)
+	{
+		all->philos[i]->start_time = all->all_start;
+		all->philos[i]->last_meal = all->all_start;
 	}
 }

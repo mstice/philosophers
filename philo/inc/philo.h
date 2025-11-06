@@ -41,6 +41,7 @@ void	death(t_data *all);
 int		no_deaths(t_data *all);
 int		all_eat(t_data *all);
 void	print_state(t_data *all, t_philo *philo, t_state action);
+void	pick_up_forks(t_data *all, t_philo *philo);
 
 //utils.c
 int		ft_putstr_fd(char *s, int fd);
@@ -51,8 +52,9 @@ int		ft_isdigit(char c);
 //time_utils.c
 time_t	time_now(time_t start_time);
 time_t	time_ms(void);
-void	ft_usleep(size_t ms);
+void	ms_sleep(size_t ms);
 void	sim_start_delay(time_t start_time);
+void	assign_start_time(t_data *all);
 
 //free_utils.c
 void	free_data(t_data *all);

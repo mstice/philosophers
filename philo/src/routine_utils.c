@@ -19,7 +19,7 @@ void	death(t_data *all)
 	pthread_mutex_unlock(&(all->sim_stop));
 }
 
-int no_deaths(t_data *all)
+int	no_deaths(t_data *all)
 {
 	int	ret;
 
@@ -37,6 +37,8 @@ int	all_eat(t_data *all)
 {
 	int	i;
 
+	if (all->must_eat == 0)
+		return (0);
 	i = 0;
 	while (i < all->n_philo)
 	{
@@ -58,16 +60,36 @@ void	print_state(t_data *all, t_philo *philo, t_state action)
 	if (!no_deaths(all))
 		return ;
 	pthread_mutex_lock(&(all->state));
-	printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
-	if (action == THINK)
+	if (no_deaths(all))
+		printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
+	if (action == THINK && no_deaths(all))
 		printf("is thinking\n");
-	else if (action == FORK)
+	else if (action == FORK && no_deaths(all))
 		printf("has taken a fork\n");
-	else if (action == EAT)
+	else if (action == EAT && no_deaths(all))
 		printf("is eating\n");
-	else if (action == SLEEP)
+	else if (action == SLEEP && no_deaths(all))
 		printf("is sleeping\n");
-	else if (action == DEAD)
+	else if (action == DEAD && no_deaths(all))
 		printf("died\n");
 	pthread_mutex_unlock(&(all->state));
+}
+
+//-----------------------------------------------------------------------------
+void	pick_up_forks(t_data *all, t_philo *philo)
+{
+	if (philo->index != all->n_philo)
+	{
+		pthread_mutex_lock(philo->forks.left_f);
+		print_state(all, philo, FORK);
+		pthread_mutex_lock(philo->forks.right_f);
+		print_state(all, philo, FORK);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->forks.right_f);
+		print_state(all, philo, FORK);
+		pthread_mutex_lock(philo->forks.left_f);
+		print_state(all, philo, FORK);
+	}
 }
