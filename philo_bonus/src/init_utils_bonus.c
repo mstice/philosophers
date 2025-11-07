@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 //-----------------------------------------------------------------------------
 //initialises t_data struct
@@ -23,6 +23,7 @@ void	init_data(t_data *all)
 	all->to_eat = 0;
 	all->to_sleep = 0;
 	all->must_eat = 0;
+	all->pids = NULL;
 	all->stop = false;
 }
 
@@ -32,25 +33,25 @@ void	init_data(t_data *all)
 //sem_init(sem_t *sem, int pshared, unsigned int value)
 //value is whatever you want to initialise the semaphore to
 //TODO: pshared should be non-zero so that the semaphore can be shared across processes
-int	init_cutlery(t_data *all)
-{
-	sem_t	*cutlery;
-	int		i;
-
-	cutlery = malloc(sizeof(sem_t *) * all->n_philo);
-	i = -1;
-	while (++i < all->n_philo)
-	{
-		// if (i + 1 % 2)
-		// 	sem_init(&cutlery[i], 1, 1);
-		// else
-		// 	sem_init(&cutlery[i], 1, 0);
-		if (sem_init(&cutlery[i], 1, 1) < 0)
-			return (ft_putstr_fd(ERR_SEM_INIT, 2), 1);
-	}
-	all->cutlery = cutlery;
-	return (0);
-}
+// int	init_cutlery(t_data *all)
+// {
+// 	sem_t	*cutlery;
+// 	int		i;
+//
+// 	cutlery = malloc(sizeof(sem_t *) * all->n_philo);
+// 	i = -1;
+// 	while (++i < all->n_philo)
+// 	{
+// 		// if (i + 1 % 2)
+// 		// 	sem_init(&cutlery[i], 1, 1);
+// 		// else
+// 		// 	sem_init(&cutlery[i], 1, 0);
+// 		if (sem_init(&cutlery[i], 1, 1) < 0) //fork the forks, value must be n_philo
+// 			return (ft_putstr_fd(ERR_SEM_INIT, 2), 1);
+// 	}
+// 	all->cutlery = cutlery;
+// 	return (0);
+// }
 
 //-----------------------------------------------------------------------------
 //initialises the t_philo struct

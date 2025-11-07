@@ -10,17 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-static void	destroy_cutlery(t_data *all)
-{
-	int	i;
-
-	i = -1;
-	while (++i < all->n_philo)
-		sem_destroy(&cutlery[i]);
-	free(all->cutlery);
-}
+// static void	destroy_cutlery(t_data *all)
+// {
+// 	int	i;
+//
+// 	i = -1;
+// 	while (++i < all->n_philo)
+// 		sem_destroy(&cutlery[i]);
+// 	free(all->cutlery);
+// }
 
 static void	free_philos(t_data *all)
 {
@@ -32,8 +32,20 @@ static void	free_philos(t_data *all)
 	free(all->philos);
 }
 
+static void	wait_children(t_data *all)
+{
+	while (pid == waitpid(-1, NULL, 0))
+	{
+		if (errno == ECHILD)
+			break;
+	}
+	printf("All children exited\n");
+}
+
 void	free_data(t_data *all)
 {
-	destroy_cutlery(all);
+	// destroy_cutlery(all);
+	wait_children(all);
+	free(all->pids);
 	free_philos(all);
 }

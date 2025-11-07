@@ -10,7 +10,14 @@ NAME := philo_bonus
 SRC_DIR := src
 OBJ_DIR := obj
 
-SRC := $(SRC_DIR)/main_bonus.c 
+SRC := $(SRC_DIR)/main_bonus.c \
+	   $(SRC_DIR)/input_check_bonus.c \
+	   $(SRC_DIR)/init_utils_bonus.c \
+	   $(SRC_DIR)/dinner_bonus.c \
+	   $(SRC_DIR)/dinner_utils_bonus.c \
+	   $(SRC_DIR)/utils_bonus.c \
+	   $(SRC_DIR)/time_utils_bonus.c \
+	   $(SRC_DIR)/free_utils_bonus.c 
 
 OBJ := $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
 INCLUDE := inc
