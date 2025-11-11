@@ -19,7 +19,7 @@ int	main(int argc, char *argv[])
 	init_data(&all);
 	if (parse_input(argc, argv, &all))
 		return (1);
-	else if (init_philos(&all))// || init_cutlery(&all))
+	else if (init_all(&all))// || init_cutlery(&all))
 			return (free_data(&all), 1);
 	else if (printf("starting dinner\n") && start_dinner(&all))
 			return (free_data(&all), 1);

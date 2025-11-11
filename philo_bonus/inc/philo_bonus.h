@@ -32,8 +32,7 @@
 
 //init_utils.c
 void	init_data(t_data *all);
-int		init_philos(t_data *all);
-int		init_forks(t_data *all);
+int		init_all(t_data *all);
 
 //input_check.c
 int	parse_input(int argc, char *argv[], t_data *all);

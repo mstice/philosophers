@@ -12,6 +12,7 @@
 
 #include "philo_bonus.h"
 
+//TODO: remove forbidden function getpid
 static void	kill_all(t_data *all)
 {
 	int	i;
@@ -24,9 +25,31 @@ static void	kill_all(t_data *all)
 			printf("You just tried to kill the parent!\n");
 			return ;
 		}
-		kill(all->pids[i], SIGTERM);
+		kill(all->pids[i], SIGKILL);
 		i++;
 	}
+}
+
+static void	think_routine(t_data *all, t_philo *philo, bool silent)
+{
+	time_t	time_to_think;
+
+	if (!no_deaths(all))
+		return ;
+	sem_wait(&(all->meals));
+	time_to_think
+		= (all->to_die - (time_ms() - philo->last_meal) - all->to_eat)
+		/ 2;
+	sem_post(&(all->meals));
+	if (time_to_think <= 0)
+		time_to_think = 0;
+	if (time_to_think == 0 && silent == true)
+		time_to_think = 1;
+	if (time_to_think > 600)
+		time_to_think = 200;
+	if (!silent)
+		print_state(all, philo, THINK);
+	ms_sleep(time_to_think);
 }
 
 static void	*waiter_routine(void *arg)
@@ -35,6 +58,7 @@ static void	*waiter_routine(void *arg)
 	int		i;
 
 	all = (t_data *)arg;
+	// start_delay(all->all_start);
 	while (42)
 	{
 		i = 0;
@@ -57,16 +81,33 @@ static void	*waiter_routine(void *arg)
 
 static void	philosopher_routine(t_data *all, t_philo *which_philo)
 {
-	(void)all;
-	// start_delay(all->all_start);
 	printf("hi I am philosopher %d\n", which_philo->index);
-	// sem_wait(&some_semaphore);
-	ms_sleep(all->to_die);
-	if (all->stop && printf("philo:%d ret:%d\n", which_philo->index, 0))
-		exit(0);
-	sleep(1000);
-	printf("philo:%d ret:%d\n", which_philo->index, 1);
-	// sem_post(&some_semaphore);
+	start_delay(all->all_start);
+	if (which_philo->index % 2)
+		think_routine(all, which_philo, true);
+	while (no_deaths(all))
+	{
+		sem_wait(&(all->cutlery));
+		print_state(all, which_philo, FORK);
+		sem_wait(&(all->cutlery));
+		print_state(all, which_philo, FORK);
+		sem_wait(&(all->meals));
+		which_philo->last_meal = time_ms();
+		sem_post(&(all->meals));
+		print_state(all, which_philo, EAT);
+		ms_sleep(all->to_eat);
+		sem_post(&(all->cutlery));
+		sem_post(&(all->cutlery));
+		think_routine(all, which_philo, false);
+		// // sem_wait(&some_semaphore);
+		// ms_sleep(all->to_die);
+		// // if (all->stop && printf("philo:%d ret:%d\n", which_philo->index, 0))
+		// // 	exit(0);
+		// // sleep(5);
+		// printf("philo:%d ret:%d\n", which_philo->index, 1);
+		// // sem_post(&some_semaphore);
+		// exit(1);
+	}
 	exit(1);
 }
 
@@ -77,6 +118,8 @@ int	start_dinner(t_data *all)
 	pid_t		pid;
 
 	assign_start_time(all);
+	if (pthread_create(&waiter, NULL, &waiter_routine, all))
+		return (ft_putstr_fd(ERR_CREATE, 2), 1);
 	i = -1;
 	while (++i < all->n_philo)
 	{
@@ -88,8 +131,8 @@ int	start_dinner(t_data *all)
 		else if (pid == 0)
 			philosopher_routine(all, all->philos[i]);
 	}
-	if (pthread_create(&waiter, NULL, &waiter_routine, all))
-		return (ft_putstr_fd(ERR_CREATE, 2), 1);
+	// if (pthread_create(&waiter, NULL, &waiter_routine, all))
+	// 	return (ft_putstr_fd(ERR_CREATE, 2), 1);
 	if (pthread_join(waiter, NULL))
 		return (ft_putstr_fd(ERR_JOIN, 2), 1);
 	return (0);

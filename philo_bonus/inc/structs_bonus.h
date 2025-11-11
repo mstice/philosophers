@@ -16,6 +16,7 @@
 # include <pthread.h>
 # include <stdbool.h>
 # include <time.h>
+# include <semaphore.h>
 
 typedef enum e_state	t_state;
 typedef struct s_forks	t_forks;
@@ -28,8 +29,15 @@ typedef enum e_state
 	FORK,
 	EAT,
 	SLEEP,
-	DEAD
+	DEAD,
+	HUNGRY
 }			t_state;
+
+typedef struct s_forks
+{
+	sem_t	*right_f;
+	sem_t	*left_f;
+}				t_forks;
 
 typedef struct s_philo
 {
@@ -38,6 +46,7 @@ typedef struct s_philo
 	time_t			start_time;
 	time_t			last_meal;
 	int				meals;
+	t_forks			forks;
 	t_data			*all;
 }				t_philo;
 
@@ -51,10 +60,12 @@ typedef struct s_data
 	int				must_eat;
 	pid_t			*pids;
 	time_t			all_start;
-	// bool			stop;
-	sem_t			room;
-	sem_t			*cutlery;
-	sem_t			stop;
+	bool			stop;
+	sem_t			cutlery;
+	sem_t			state;
+	// sem_t			*status;
+	sem_t			meals;
+	sem_t			sim_stop;
 }				t_data;
 
 #endif

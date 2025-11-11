@@ -37,7 +37,6 @@ static int	update_all(t_data *all, char *argv[])
 			all->must_eat = n;
 		j++;
 	}
-	all->pids = malloc(sizeof(pid_t) * all->n_philo);
 	return (0);
 }
 

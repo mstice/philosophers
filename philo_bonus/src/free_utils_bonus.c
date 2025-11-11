@@ -18,7 +18,7 @@
 //
 // 	i = -1;
 // 	while (++i < all->n_philo)
-// 		sem_destroy(&cutlery[i]);
+// 		sem_destroy(&(all->cutlery[i]));
 // 	free(all->cutlery);
 // }
 
@@ -34,10 +34,15 @@ static void	free_philos(t_data *all)
 
 static void	wait_children(t_data *all)
 {
-	while (pid == waitpid(-1, NULL, 0))
+	int	i;
+
+	i = -1;
+	while (++i < all->n_philo)
 	{
-		if (errno == ECHILD)
-			break;
+		if (all->pids[i] == waitpid(-1, NULL, 0))
+		{	if (errno == ECHILD)
+				break;
+		}
 	}
 	printf("All children exited\n");
 }
@@ -45,6 +50,10 @@ static void	wait_children(t_data *all)
 void	free_data(t_data *all)
 {
 	// destroy_cutlery(all);
+	sem_destroy(&(all->meals));
+	sem_destroy(&(all->state));
+	sem_destroy(&(all->cutlery));
+	sem_destroy(&(all->sim_stop));
 	wait_children(all);
 	free(all->pids);
 	free_philos(all);

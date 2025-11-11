@@ -15,18 +15,22 @@
 //TODO: use a sem
 void	death_or_full(t_data *all)
 {
+	sem_wait(&(all->sim_stop));
 	all->stop = true;
+	sem_post(&(all->sim_stop));
 }
 
-//TODO: use a sem
+//TODO: incorrect usage of sem
 int	no_deaths(t_data *all)
 {
 	bool	ret;
-	
+
+	sem_wait(&(all->sim_stop));
 	if (!all->stop)
 		ret = true;
 	else
 		ret = false;
+	sem_post(&(all->sim_stop));
 	return (ret);
 }
 
@@ -57,6 +61,7 @@ void	print_state(t_data *all, t_philo *philo, t_state action)
 		return ;
 	if (!no_deaths(all))
 		return ;
+	sem_wait(&(all->state));
 	if (no_deaths(all))
 		printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
 	if (action == THINK && no_deaths(all))
@@ -69,4 +74,5 @@ void	print_state(t_data *all, t_philo *philo, t_state action)
 		printf("is sleeping\n");
 	else if (action == DEAD && no_deaths(all))
 		printf("died\n");
+	sem_post(&(all->state));
 }
