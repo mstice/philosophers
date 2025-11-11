@@ -14,21 +14,21 @@
 
 static void	destroy_sems(t_data *all)
 {
-	int	i;
-
-	i = -1;
-	while (++i < all->n_philo)
-	{
-		sem_destroy(&(all->cutlery[i]));
-		sem_destroy(&(all->status[i]));
-	}
-	free(all->cutlery);
-	free(all->status);
-	sem_destroy(&(all->sem_cutlery));
-	sem_destroy(&(all->sem_meals));
+	sem_unlink("cutlery");
+	sem_close(all->sem_cutlery);
+	sem_unlink("meals0");
+	sem_close(all->sem_meals[0]);
+	sem_unlink("meals1");
+	sem_close(all->sem_meals[1]);
+	sem_unlink("meals2");
+	sem_close(all->sem_meals[2]);
+	sem_unlink("meals3");
+	sem_close(all->sem_meals[3]);
+	sem_unlink("meals4");
+	sem_close(all->sem_meals[4]);
+	free(all->sem_meals);
 	sem_destroy(&(all->sem_output));
-	sem_destroy(&(all->sem_sim_stop));
-	sem_destroy(&(all->sem_status));
+	// sem_destroy(&(all->sem_meals));
 }
 
 static void	free_philos(t_data *all)
@@ -49,7 +49,8 @@ static void	wait_children(t_data *all)
 	while (++i < all->n_philo)
 	{
 		if (all->pids[i] == waitpid(-1, NULL, 0))
-		{	if (errno == ECHILD)
+		{
+			if (errno == ECHILD)
 				break;
 		}
 	}

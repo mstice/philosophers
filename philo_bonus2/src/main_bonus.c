@@ -16,7 +16,8 @@ int	main(int argc, char *argv[])
 {
 	t_data	all;
 
-	if (init_data(&all) || parse_input(argc, argv, &all))
+	init_data(&all);
+	if (parse_input(argc, argv, &all))
 		return (1);
 	else if (init_all(&all))
 		return (free_all(&all), 1);

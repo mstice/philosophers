@@ -20,6 +20,8 @@
 # define ERR_JOIN "Failed to join thread\n"
 # define ERR_TIME "Failed to get time of day\n"
 # define ERR_SEM_INIT "Failed to initialise semaphore\n"
+# define ERR_SEM_OPNE "Failed to open semaphore\n"
 # define ERR_FORK "Failed to fork\n"
+# define ERR_KILL "Failed to kill desired process\n"
 
 #endif

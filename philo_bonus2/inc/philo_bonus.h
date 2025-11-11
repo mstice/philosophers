@@ -28,6 +28,7 @@
 # include <signal.h> //kill
 # include <sys/wait.h> //waitpid
 # include <semaphore.h> //sem_open, sem_close, sem_wait, sem_unlink, sem_post
+# include <fcntl.h>
 # include <errno.h>
 
 //init_utils.c
@@ -41,10 +42,10 @@ int	parse_input(int argc, char *argv[], t_data *all);
 int	start_dinner(t_data *all);
 
 //dinner_utils.c
-void	death_or_full(t_data *all);
-int		no_deaths(t_data *all);
-int		all_eat(t_data *all);
-void	print_output(t_data *all, t_philo *philo, t_state action);
+bool	alive(t_data *all, sem_t **meals, t_philo *philo);
+bool	enough_meals(t_data *all, sem_t **meals, t_philo *philo);
+void	kill_all(t_data *all);
+void	print_output(t_data *all, sem_t **meals, t_philo *philo, t_state action);
 
 //utils.c
 int		ft_putstr_fd(char *s, int fd);

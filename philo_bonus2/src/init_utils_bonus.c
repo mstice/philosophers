@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 17:45:32 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/10 20:47:59 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/11 11:53:05 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ int	init_data(t_data *all)
 	all->to_sleep = 0;
 	all->must_eat = 0;
 	all->pids = NULL;
-	all->stop = false;
-	if (sem_init(&(all->sem_output), 1, 1) < 0
-		|| sem_init(&(all->sem_meals), 1, 1) < 0
-		|| sem_init(&(all->sem_sim_stop), 1, 1) < 0)
-		return (ft_putstr_fd(ERR_SEM_INIT, 2), 1);
 	return (0);
 }
 
@@ -59,47 +54,30 @@ static int	init_philos(t_data *all)
 //-----------------------------------------------------------------------------
 static int	init_pids(t_data *all)
 {
+	int	i;
+
 	all->pids = malloc(sizeof(pid_t) * all->n_philo);
 	if (!all->pids)
 		return (ft_putstr_fd(ERR_MALLOC, 2), 1);
-	memset(all->pids, 0, all->n_philo);
+	i = -1;
+	while (++i < all->n_philo)
+		all->pids[i] = 0;
 	return (0);
 }
 
 //-----------------------------------------------------------------------------
-static int	init_status(t_data *all)
+static int	init_sems(t_data *all)
 {
-	int	i;
-		
-	all->status = malloc(sizeof(sem_t) * all->n_philo);
-	if (!all->status)
-		return (ft_putstr_fd(ERR_MALLOC, 2), 1);
-	i = -1;
-	while (++i < all->n_philo)
-	{
-		if (sem_init(&(all->status[i]), 0 , 1) < 0)
-			return (ft_putstr_fd(ERR_SEM_INIT, 2), 1);
-	}
-	memset(all->status, HUNGRY, all->n_philo);
-	sem_init(&(all->sem_status), 1, 1);
-	return (0);
-}
-
-//-----------------------------------------------------------------------------
-static int	init_cutlery(t_data *all)
-{
-	int	i;
-
-	all->cutlery = malloc(sizeof(sem_t) * all->n_philo);
-	if (!all->cutlery)
-		return (ft_putstr_fd(ERR_MALLOC, 2), 1);
-	i = -1;
-	while (++i < all->n_philo)
-	{
-		if (sem_init(&(all->cutlery[i]), 1, 1) < 0)
-			return (ft_putstr_fd(ERR_SEM_INIT, 2), 1);
-	}
-	sem_init(&(all->sem_cutlery), 1, 1);
+	if (sem_init(&(all->sem_output), 1, 1) < 0) // || sem_init(&(all->sem_meals), 1, 1) < 0)	
+		return (ft_putstr_fd(ERR_SEM_INIT, 2), 1);
+	all->sem_cutlery = sem_open("cutlery", O_CREAT | O_EXCL, 0644, all->n_philo);
+	// all->sem_meals = sem_open("meals", O_CREAT | O_EXCL, 0644, 1);
+	all->sem_meals = malloc(sizeof(sem_t *) * 5);
+	all->sem_meals[0] = sem_open("meals0", O_CREAT | O_EXCL, 0644, 1);
+	all->sem_meals[1] = sem_open("meals1", O_CREAT | O_EXCL, 0644, 1);
+	all->sem_meals[2] = sem_open("meals2", O_CREAT | O_EXCL, 0644, 1);
+	all->sem_meals[3] = sem_open("meals3", O_CREAT | O_EXCL, 0644, 1);
+	all->sem_meals[4] = sem_open("meals4", O_CREAT | O_EXCL, 0644, 1);
 	return (0);
 }
 
@@ -110,9 +88,7 @@ int	init_all(t_data *all)
 		return (1);
 	else if (init_pids(all))
 		return (1);
-	else if (init_status(all))
-		return (1);
-	else if (init_cutlery(all))
+	else if (init_sems(all))
 		return (1);
 	return (0);
 }

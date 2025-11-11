@@ -25,7 +25,6 @@ typedef struct s_data	t_data;
 typedef enum e_state
 {
 	THINK,
-	HUNGRY,
 	FORK,
 	EAT,
 	SLEEP,
@@ -51,15 +50,11 @@ typedef struct s_data
 	int				to_sleep;
 	int				must_eat;
 	time_t			all_start;
+	t_state			*status;
 	pid_t			*pids;
-	sem_t			sem_cutlery;
-	sem_t			*cutlery;
+	sem_t			*sem_cutlery;
 	sem_t			sem_output;
-	sem_t			sem_meals;
-	sem_t			sem_status;
-	sem_t			*status;
-	sem_t			sem_sim_stop;
-	bool			stop;
+	sem_t			**sem_meals;
 }				t_data;
 
 #endif
