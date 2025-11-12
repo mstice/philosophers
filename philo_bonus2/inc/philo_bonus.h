@@ -45,7 +45,7 @@ int	start_dinner(t_data *all);
 bool	alive(t_data *all, sem_t **meals, t_philo *philo);
 bool	enough_meals(t_data *all, sem_t **meals, t_philo *philo);
 void	kill_all(t_data *all);
-void	print_output(t_data *all, sem_t **meals, t_philo *philo, t_state action);
+void	print_output(t_data *all, sem_t **meals, sem_t **output, t_philo *philo, t_state action);
 
 //utils.c
 int		ft_putstr_fd(char *s, int fd);
@@ -61,6 +61,7 @@ void	start_delay(time_t start_time);
 void	assign_start_time(t_data *all);
 
 //free_utils.c
+void	ft_exit(t_data *all, int exit_code);
 void	free_all(t_data *all);
 
 #endif

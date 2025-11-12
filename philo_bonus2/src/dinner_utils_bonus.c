@@ -66,12 +66,12 @@ void	kill_all(t_data *all)
 }
 
 //------------------------------------------------------------------------------
-void	print_output(t_data *all, sem_t **meals, t_philo *philo, t_state action)
+void	print_output(t_data *all, sem_t **meals, sem_t **output, t_philo *philo, t_state action)
 {
 	if (action != THINK && action != FORK && action != EAT && action != SLEEP
 		&& action != DEAD)
 		return ;
-	sem_wait(&(all->sem_output));
+	sem_wait(*output);
 	if (alive(all, meals, philo))
 		printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
 	if (action == THINK && alive(all, meals, philo))
@@ -84,5 +84,5 @@ void	print_output(t_data *all, sem_t **meals, t_philo *philo, t_state action)
 		printf("is sleeping\n");
 	else if (action == DEAD && !alive(all, meals, philo))
 		printf("%-5zu %2d died\n", time_now(philo->start_time), philo->index);
-	sem_post(&(all->sem_output));
+	sem_post(*output);
 }

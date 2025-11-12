@@ -68,16 +68,8 @@ static int	init_pids(t_data *all)
 //-----------------------------------------------------------------------------
 static int	init_sems(t_data *all)
 {
-	if (sem_init(&(all->sem_output), 1, 1) < 0) // || sem_init(&(all->sem_meals), 1, 1) < 0)	
-		return (ft_putstr_fd(ERR_SEM_INIT, 2), 1);
 	all->sem_cutlery = sem_open("cutlery", O_CREAT | O_EXCL, 0644, all->n_philo);
-	// all->sem_meals = sem_open("meals", O_CREAT | O_EXCL, 0644, 1);
-	all->sem_meals = malloc(sizeof(sem_t *) * 5);
-	all->sem_meals[0] = sem_open("meals0", O_CREAT | O_EXCL, 0644, 1);
-	all->sem_meals[1] = sem_open("meals1", O_CREAT | O_EXCL, 0644, 1);
-	all->sem_meals[2] = sem_open("meals2", O_CREAT | O_EXCL, 0644, 1);
-	all->sem_meals[3] = sem_open("meals3", O_CREAT | O_EXCL, 0644, 1);
-	all->sem_meals[4] = sem_open("meals4", O_CREAT | O_EXCL, 0644, 1);
+	all->sem_output = sem_open("output", O_CREAT | O_EXCL, 0644, 1);
 	return (0);
 }
 

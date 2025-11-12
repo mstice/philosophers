@@ -35,17 +35,12 @@
 static void	*waiter_routine(void *arg)
 {
 	t_data	*all;
-	sem_t	**meals;
 	int		i;
 	int		wstatus;
 
 	all = (t_data *)arg;
-	meals = all->sem_meals;
-	meals[0] = sem_open("meals0", 0);
-	meals[1] = sem_open("meals1", 0);
-	meals[2] = sem_open("meals2", 0);
-	meals[3] = sem_open("meals3", 0);
-	meals[4] = sem_open("meals4", 0);
+	// all->sem_meals = sem_open("meals", O_CREAT, 0644, 1);
+	// sem_t *output = sem_open("output", 0);
 	start_delay(all->all_start);
 	while (42)
 	{
@@ -60,7 +55,8 @@ static void	*waiter_routine(void *arg)
 					kill(all->pids[i], SIGKILL);
 				else if (WEXITSTATUS(wstatus) == DEAD)
 				{
-					print_output(all, &meals[i], all->philos[i], DEAD);
+					// print_output(all, &(all->sem_meals), &output, all->philos[i], DEAD);
+					printf("%d: DIED\n", i + 1);
 					kill_all(all);
 					return (NULL);
 				}
@@ -71,11 +67,11 @@ static void	*waiter_routine(void *arg)
 	return (NULL);
 }
 
-static void	alone_routine(t_data *all, sem_t **cutlery, sem_t **meals, t_philo *which_philo)
+static void	alone_routine(t_data *all, sem_t **cutlery, sem_t **output, sem_t **meals, t_philo *which_philo)
 {
 	start_delay(all->all_start);
 	sem_wait(*cutlery);
-	print_output(all, meals, which_philo, FORK);
+	print_output(all, meals, output, which_philo, FORK);
 	ms_sleep(all->to_die);
 	sem_post(*cutlery);
 }
@@ -84,44 +80,30 @@ static void	alone_routine(t_data *all, sem_t **cutlery, sem_t **meals, t_philo *
 static void	philosopher_routine(t_data *all, t_philo *which_philo)
 {
 	printf("hi I am philosopher %d\n", which_philo->index);
-	sem_t *cutlery;
-	sem_t *meals;
-	cutlery = sem_open("cutlery", 0);
-	if (which_philo->index - 1 == 0)
-		meals = sem_open("meals0", 0);
-	else if (which_philo->index - 1 == 1)
-		meals = sem_open("meals1", 0);
-	else if (which_philo->index - 1 == 2)
-		meals = sem_open("meals2", 0);
-	else if (which_philo->index - 1 == 3)
-		meals = sem_open("meals3", 0);
-	else if (which_philo->index - 1 == 4)
-		meals = sem_open("meals4", 0);
+	sem_t	*cutlery = sem_open("cutlery", 0);
+	sem_t	*output = sem_open("output", 0);
+	all->sem_meals = sem_open("meals", O_CREAT, 0644, 1);
+	sem_t *meals = all->sem_meals;
 	if (all->n_philo == 1)
-		(alone_routine(all, &cutlery, &meals, which_philo), exit(EXIT_SUCCESS));
+		(alone_routine(all, &cutlery, &output, &meals, which_philo), exit(EXIT_SUCCESS));
 	start_delay(all->all_start);
 	if (which_philo->index % 2)
 		ms_sleep(all->to_eat);
 	while (42)
 	{
-		(sem_wait(cutlery), print_output(all, &meals, which_philo, FORK));
-		(sem_wait(cutlery), print_output(all, &meals, which_philo, FORK));
-		// sem_wait(meals);
+		(sem_wait(cutlery), print_output(all, &meals, &output, which_philo, FORK));
+		(sem_wait(cutlery), print_output(all, &meals, &output, which_philo, FORK));
 		which_philo->last_meal = time_ms();
 		which_philo->meals++;
-		// sem_post(meals);
-		(print_output(all, &meals, which_philo, EAT), ms_sleep(all->to_eat));
+		(print_output(all, &meals, &output, which_philo, EAT), ms_sleep(all->to_eat));
 		(sem_post(cutlery), sem_post(cutlery));
-		// if (all->must_eat > 0 && which_philo->meals == all->must_eat && printf("%d: enough is enough!\n", which_philo->index))
-		// 	exit(EXIT_SUCCESS);
 		if (enough_meals(all, &meals, which_philo))
-			exit(ENOUGH);
+			ft_exit(all, ENOUGH);
+		(print_output(all, &meals, &output, which_philo, SLEEP), ms_sleep(all->to_sleep));
 		if (!alive(all, &meals, which_philo))
-			exit(DEAD);
-		(print_output(all, &meals, which_philo, SLEEP), ms_sleep(all->to_sleep));
-		//think_routine(all, which_philo, false);
+			ft_exit(all, DEAD);
 	}
-	exit(EXIT_FAILURE);
+	ft_exit(all, EXIT_FAILURE);
 }
 
 int	start_dinner(t_data *all)

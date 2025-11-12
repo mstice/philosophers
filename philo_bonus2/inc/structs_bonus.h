@@ -54,8 +54,8 @@ typedef struct s_data
 	t_state			*status;
 	pid_t			*pids;
 	sem_t			*sem_cutlery;
-	sem_t			sem_output;
-	sem_t			**sem_meals;
+	sem_t			*sem_output;
+	sem_t			*sem_meals;
 }				t_data;
 
 #endif
