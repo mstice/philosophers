@@ -52,12 +52,18 @@ static void	*waiter_routine(void *arg)
 		i = 0;
 		while (i < all->n_philo)
 		{
-			if (!enough_meals(all, &(meals[i]), all->philos[i]) && !alive(all, &(meals[i]), all->philos[i]))
-			{
-				if (waitpid(all->pids[i], &wstatus, WNOHANG) == 0)
-					print_output(all, &(meals[i]), all->philos[i], DEAD);
-				kill_all(all);
+			if (errno == ESRCH)
 				return (NULL);
+			if (waitpid(all->pids[i], &wstatus, WNOHANG) != 0)
+			{
+				if (WEXITSTATUS(wstatus) == ENOUGH)
+					kill(all->pids[i], SIGKILL);
+				else if (WEXITSTATUS(wstatus) == DEAD)
+				{
+					print_output(all, &meals[i], all->philos[i], DEAD);
+					kill_all(all);
+					return (NULL);
+				}
 			}
 			i++;
 		}
@@ -96,8 +102,6 @@ static void	philosopher_routine(t_data *all, t_philo *which_philo)
 	start_delay(all->all_start);
 	if (which_philo->index % 2)
 		ms_sleep(all->to_eat);
-	// if (which_philo->index % 2)
-	// 	think_routine(all, which_philo, true);
 	while (42)
 	{
 		(sem_wait(cutlery), print_output(all, &meals, which_philo, FORK));
@@ -111,7 +115,9 @@ static void	philosopher_routine(t_data *all, t_philo *which_philo)
 		// if (all->must_eat > 0 && which_philo->meals == all->must_eat && printf("%d: enough is enough!\n", which_philo->index))
 		// 	exit(EXIT_SUCCESS);
 		if (enough_meals(all, &meals, which_philo))
-			exit(EXIT_SUCCESS);
+			exit(ENOUGH);
+		if (!alive(all, &meals, which_philo))
+			exit(DEAD);
 		(print_output(all, &meals, which_philo, SLEEP), ms_sleep(all->to_sleep));
 		//think_routine(all, which_philo, false);
 	}

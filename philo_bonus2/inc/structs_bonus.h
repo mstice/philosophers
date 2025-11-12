@@ -28,6 +28,7 @@ typedef enum e_state
 	FORK,
 	EAT,
 	SLEEP,
+	ENOUGH,
 	DEAD,
 }			t_state;
 
