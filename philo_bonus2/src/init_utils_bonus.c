@@ -13,20 +13,6 @@
 #include "philo_bonus.h"
 
 //-----------------------------------------------------------------------------
-//initialises t_data struct
-int	init_data(t_data *all)
-{
-	all->philos = NULL;
-	all->n_philo = 0;
-	all->to_die = 0;
-	all->to_eat = 0;
-	all->to_sleep = 0;
-	all->must_eat = 0;
-	all->pids = NULL;
-	return (0);
-}
-
-//-----------------------------------------------------------------------------
 //initialises the t_philo struct
 static int	init_philos(t_data *all)
 {
@@ -52,6 +38,7 @@ static int	init_philos(t_data *all)
 }
 
 //-----------------------------------------------------------------------------
+//initialises the array that will store the pids of the children
 static int	init_pids(t_data *all)
 {
 	int	i;
@@ -66,11 +53,41 @@ static int	init_pids(t_data *all)
 }
 
 //-----------------------------------------------------------------------------
+//opens semaphores and checks for opening problems
 static int	init_sems(t_data *all)
 {
-	all->sem_cutlery = sem_open("cutlery", O_CREAT | O_EXCL, 0644, all->n_philo);
-	all->sem_output = sem_open("output", O_CREAT | O_EXCL, 0644, 1);
+	all->sem_cutlery
+		= sem_open("/cutlery", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR,
+			all->n_philo);
+	if (all->sem_cutlery == SEM_FAILED)
+		return (sem_error(all));
+	all->sem_output
+		= sem_open("/output", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 1);
+	if (all->sem_output == SEM_FAILED)
+		return (sem_error(all));
+	all->sem_meals
+		= sem_open("/meals", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 1);
+	if (all->sem_meals == SEM_FAILED)
+		return (sem_error(all));
 	return (0);
+}
+
+//-----------------------------------------------------------------------------
+//checks which type of error ocurred when SEM_FAILED was detected
+//if EEXIST, destroys semaphores and re-initialises them
+int	sem_error(t_data *all)
+{
+	if (errno == EEXIST)
+	{
+		destroy_sems(all);
+		init_sems(all);
+		return (0);
+	}
+	else
+	{
+		ft_putstr_fd(ERR_SEM_OPEN, 2);
+		return (1);
+	}
 }
 
 //-----------------------------------------------------------------------------

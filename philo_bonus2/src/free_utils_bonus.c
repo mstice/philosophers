@@ -12,16 +12,20 @@
 
 #include "philo_bonus.h"
 
-static void	destroy_sems(t_data *all)
+//-----------------------------------------------------------------------------
+//unlinks and destroys semaphores
+void	destroy_sems(t_data *all)
 {
-	sem_unlink("cutlery");
+	sem_unlink("/cutlery");
 	sem_close(all->sem_cutlery);
-	sem_unlink("output");
+	sem_unlink("/output");
 	sem_close(all->sem_output);
-	sem_unlink("meals");
+	sem_unlink("/meals");
 	sem_close(all->sem_meals);
 }
 
+//-----------------------------------------------------------------------------
+//frees the philo array
 static void	free_philos(t_data *all)
 {
 	int	i;
@@ -32,18 +36,8 @@ static void	free_philos(t_data *all)
 	free(all->philos);
 }
 
-void	ft_exit(t_data *all, int exit_code)
-{
-	// sem_unlink("cutlery");
-	// sem_close(all->sem_cutlery);
-	// sem_unlink("output");
-	// sem_close(all->sem_output);
-	// sem_unlink("meals");
-	// sem_close(all->sem_output);
-	(void)all;
-	exit(exit_code);
-}
-
+//-----------------------------------------------------------------------------
+//waits for all children to finish executing
 static void	wait_children(t_data *all)
 {
 	int	i;
@@ -54,12 +48,12 @@ static void	wait_children(t_data *all)
 		if (all->pids[i] == waitpid(-1, NULL, 0))
 		{
 			if (errno == ECHILD)
-				break;
+				break ;
 		}
 	}
-	printf("All children exited\n");
 }
 
+//-----------------------------------------------------------------------------
 void	free_all(t_data *all)
 {
 	destroy_sems(all);

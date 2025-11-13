@@ -16,12 +16,10 @@
 # define ERR_MALLOC "Malloc error\n"
 # define ERR_ARGS "All args must an int and be > 0 && =< INT_MAX\n"
 # define ERR_CREATE "Failed to create thread\n"
-# define ERR_DETACH "Failed to detach thread\n"
 # define ERR_JOIN "Failed to join thread\n"
 # define ERR_TIME "Failed to get time of day\n"
-# define ERR_SEM_INIT "Failed to initialise semaphore\n"
-# define ERR_SEM_OPNE "Failed to open semaphore\n"
+# define ERR_SEM_OPEN "Failed to open semaphore\n"
 # define ERR_FORK "Failed to fork\n"
 # define ERR_KILL "Failed to kill desired process\n"
-
+# define ERR_EXIT "Child did not exit normally!\n"
 #endif

@@ -11,6 +11,19 @@
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+//-----------------------------------------------------------------------------
+//initialises t_data struct
+static int	init_data(t_data *all)
+{
+	all->philos = NULL;
+	all->n_philo = 0;
+	all->to_die = 0;
+	all->to_eat = 0;
+	all->to_sleep = 0;
+	all->must_eat = 0;
+	all->pids = NULL;
+	return (0);
+}
 
 int	main(int argc, char *argv[])
 {
@@ -21,9 +34,8 @@ int	main(int argc, char *argv[])
 		return (1);
 	else if (init_all(&all))
 		return (free_all(&all), 1);
-	else if (printf("starting dinner\n") && start_dinner(&all))
+	if (start_dinner(&all))
 		return (free_all(&all), 1);
 	free_all(&all);
-	printf("dinner is over!\n");
 	return (0);
 }

@@ -32,20 +32,20 @@
 # include <errno.h>
 
 //init_utils.c
-int		init_data(t_data *all);
+int		sem_error(t_data *all);
 int		init_all(t_data *all);
 
 //input_check.c
-int	parse_input(int argc, char *argv[], t_data *all);
+int		parse_input(int argc, char *argv[], t_data *all);
 
 //dinner.c
-int	start_dinner(t_data *all);
+int		start_dinner(t_data *all);
 
 //dinner_utils.c
-bool	alive(t_data *all, sem_t **meals, t_philo *philo);
-bool	enough_meals(t_data *all, sem_t **meals, t_philo *philo);
+bool	alive(t_data *all, t_philo *philo);
+bool	enough_meals(t_data *all, t_philo *philo);
 void	kill_all(t_data *all);
-void	print_output(t_data *all, sem_t **meals, sem_t **output, t_philo *philo, t_state action);
+void	print_output(t_data *all, t_philo *philo, t_state action);
 
 //utils.c
 int		ft_putstr_fd(char *s, int fd);
@@ -61,7 +61,7 @@ void	start_delay(time_t start_time);
 void	assign_start_time(t_data *all);
 
 //free_utils.c
-void	ft_exit(t_data *all, int exit_code);
+void	destroy_sems(t_data *all);
 void	free_all(t_data *all);
 
 #endif

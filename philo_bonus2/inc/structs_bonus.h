@@ -51,7 +51,6 @@ typedef struct s_data
 	int				to_sleep;
 	int				must_eat;
 	time_t			all_start;
-	t_state			*status;
 	pid_t			*pids;
 	sem_t			*sem_cutlery;
 	sem_t			*sem_output;

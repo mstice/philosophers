@@ -14,33 +14,35 @@
 
 //-----------------------------------------------------------------------------
 //checks whether a philo is alive
-bool	alive(t_data *all, sem_t **meals, t_philo *philo)
+bool	alive(t_data *all, t_philo *philo)
 {
 	bool	ret;
 
-	sem_wait(*meals);
+	sem_wait(all->sem_meals);
 	if (time_ms() - philo->last_meal >= all->to_die)
 		ret = false;
 	else
 		ret = true;
-	sem_post(*meals);
+	sem_post(all->sem_meals);
+	if (ret == false)
+		exit(DEAD);
 	return (ret);
 }
 
 //-----------------------------------------------------------------------------
 //returns true if philo has consumed enough meals
-bool	enough_meals(t_data *all, sem_t **meals, t_philo *philo)
+bool	enough_meals(t_data *all, t_philo *philo)
 {
 	bool	ret;
 
 	if (all->must_eat == 0)
 		return (false);
-	sem_wait(*meals);
+	sem_wait(all->sem_meals);
 	if (philo->meals >= all->must_eat)
 		ret = true;
 	else
 		ret = false;
-	sem_post(*meals);
+	sem_post(all->sem_meals);
 	return (ret);
 }
 
@@ -66,23 +68,23 @@ void	kill_all(t_data *all)
 }
 
 //------------------------------------------------------------------------------
-void	print_output(t_data *all, sem_t **meals, sem_t **output, t_philo *philo, t_state action)
+void	print_output(t_data *all, t_philo *philo, t_state action)
 {
 	if (action != THINK && action != FORK && action != EAT && action != SLEEP
 		&& action != DEAD)
 		return ;
-	sem_wait(*output);
-	if (alive(all, meals, philo))
+	sem_wait(all->sem_output);
+	if (action != DEAD)
 		printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
-	if (action == THINK && alive(all, meals, philo))
+	if (action == THINK)
 		printf("is thinking\n");
-	else if (action == FORK && alive(all, meals, philo))
+	else if (action == FORK)
 		printf("has taken a fork\n");
-	else if (action == EAT && alive(all, meals, philo))
+	else if (action == EAT)
 		printf("is eating\n");
-	else if (action == SLEEP && alive(all, meals, philo))
+	else if (action == SLEEP)
 		printf("is sleeping\n");
-	else if (action == DEAD && !alive(all, meals, philo))
+	else if (action == DEAD)
 		printf("%-5zu %2d died\n", time_now(philo->start_time), philo->index);
-	sem_post(*output);
+	sem_post(all->sem_output);
 }
