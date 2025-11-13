@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 17:45:32 by mtice             #+#    #+#             */
-/*   Updated: 2025/10/28 12:08:47 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/13 18:29:37 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,27 @@ void	init_data(t_data *all)
 	all->to_sleep = 0;
 	all->must_eat = 0;
 	all->stop = false;
-	pthread_mutex_init(&(all->sim_stop), NULL);
-	pthread_mutex_init(&(all->state), NULL);
-	pthread_mutex_init(&(all->meals), NULL);
-	all->cutlery = NULL;
+	pthread_mutex_init(&(all->m_stop), NULL);
+	pthread_mutex_init(&(all->m_output), NULL);
+	pthread_mutex_init(&(all->m_meals), NULL);
+	all->m_cutlery = NULL;
 }
 
 //-----------------------------------------------------------------------------
-//initialises cutlery, which is an array of mutexes
+//initialises m_cutlery, which is an array of mutexes
 //each member represents a fork, and there are as many forks as nbr of philos
 int	init_forks(t_data *all)
 {
-	pthread_mutex_t	*cutlery;
+	pthread_mutex_t	*m_cutlery;
 	int				i;
 
-	cutlery = malloc(sizeof(pthread_mutex_t) * all->n_philo);
-	if (!cutlery)
+	m_cutlery = malloc(sizeof(pthread_mutex_t) * all->n_philo);
+	if (!m_cutlery)
 		return (ft_putendl_fd(ERR_MALLOC, 2), 1);
 	i = -1;
 	while (++i < all->n_philo)
-		pthread_mutex_init(&cutlery[i], NULL);
-	all->cutlery = cutlery;
+		pthread_mutex_init(&m_cutlery[i], NULL);
+	all->m_cutlery = m_cutlery;
 	return (0);
 }
 
@@ -69,11 +69,11 @@ int	init_philos(t_data *all)
 		philos[i]->last_meal = time_ms();
 		philos[i]->meals = 0;
 		philos[i]->all = all;
-		philos[i]->forks.left_f = &(all->cutlery[i]);
+		philos[i]->forks.left_f = &(all->m_cutlery[i]);
 		if (i == 0)
-			philos[i]->forks.right_f = &(all->cutlery[all->n_philo - 1]);
+			philos[i]->forks.right_f = &(all->m_cutlery[all->n_philo - 1]);
 		else
-			philos[i]->forks.right_f = &(all->cutlery[i - 1]);
+			philos[i]->forks.right_f = &(all->m_cutlery[i - 1]);
 	}
 	philos[all->n_philo] = NULL;
 	return (all->philos = philos, 0);

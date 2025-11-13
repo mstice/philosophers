@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 19:25:21 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/04 14:59:13 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/13 18:21:33 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ int		parse_input(int argc, char *argv[], t_data *all);
 int		start_dinner(t_data *all);
 
 //routine_utils.c
-void	death(t_data *all);
-int		no_deaths(t_data *all);
-int		all_eat(t_data *all);
-void	print_state(t_data *all, t_philo *philo, t_state action);
+void	stop(t_data *all);
+bool	alive(t_data *all);
+bool	enough(t_data *all);
+void	print_output(t_data *all, t_philo *philo, t_state action);
 void	pick_up_forks(t_data *all, t_philo *philo);
 
 //utils.c
