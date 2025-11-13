@@ -55,8 +55,10 @@ static void	*philo_routine(void *arg)
 		return (alone_routine(all, philo), NULL);
 	start_delay(all->all_start);
 	if (philo->index % 2)
-		ms_sleep(all->to_eat);
-		//think_routine(all, philo, true);
+	{
+		print_state(all, philo, THINK);
+		usleep(all->to_eat * 1000 - (1000 * all->n_philo));
+	}
 	while (no_deaths(all))
 	{
 		pick_up_forks(all, philo);

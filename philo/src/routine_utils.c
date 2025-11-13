@@ -60,9 +60,10 @@ void	print_state(t_data *all, t_philo *philo, t_state action)
 	if (!no_deaths(all))
 		return ;
 	pthread_mutex_lock(&(all->state));
-	if (no_deaths(all))
-	{
-		printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
+	// if (no_deaths(all))
+	// {
+		if (action != DEAD)
+			printf("%-5zu %2d ", time_now(philo->start_time), philo->index);
 		if (action == THINK)
 			printf("is thinking\n");
 		else if (action == FORK)
@@ -71,7 +72,7 @@ void	print_state(t_data *all, t_philo *philo, t_state action)
 			printf("is eating\n");
 		else if (action == SLEEP)
 			printf("is sleeping\n");
-	}
+	// }
 	else if (action == DEAD)
 		printf("%-5zu %2d died\n", time_now(philo->start_time), philo->index);
 	pthread_mutex_unlock(&(all->state));
