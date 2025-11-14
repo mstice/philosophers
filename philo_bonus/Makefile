@@ -1,9 +1,9 @@
-CYAN := \033[0;96m
-MAGENTA := \033[0;95m
-YELLOW := \033[0;93m
-GREEN := \033[0;92m
-RED := \033[0;91m
-RESET := \033[0m
+CYAN=$(shell echo -e "\033[0;96m")
+MAGENTA=$(shell echo -e "\033[0;95m")
+YELLOW=$(shell echo -e "\033[0;93m")
+GREEN=$(shell echo -e "\033[0;92m")
+RED=$(shell echo -e "\033[0;91m")
+RESET=$(shell echo -e "\033[0m")
 
 NAME := philo_bonus
 
@@ -29,7 +29,7 @@ RM := rm -rf
 
 $(NAME): $(OBJ)
 		@$(CC) $(CFLAGS) $^ -o $(NAME)
-		@echo "\n${GREEN} Created $(NAME)${RESET}\n"
+		@echo "${GREEN} Created $(NAME)${RESET}"
 
 $(OBJ): $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 		@mkdir -p $(OBJ_DIR)
