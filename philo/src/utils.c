@@ -12,6 +12,7 @@
 
 #include "philo.h"
 
+//-----------------------------------------------------------------------------
 int	ft_putstr_fd(char *s, int fd)
 {
 	unsigned int	i;
@@ -25,6 +26,7 @@ int	ft_putstr_fd(char *s, int fd)
 	return (i);
 }
 
+//-----------------------------------------------------------------------------
 int	ft_putendl_fd(char *s, int fd)
 {
 	unsigned int	i;
@@ -39,6 +41,7 @@ int	ft_putendl_fd(char *s, int fd)
 	return (i);
 }
 
+//-----------------------------------------------------------------------------
 long	ft_atol(const char *s)
 {
 	long	i;
@@ -68,6 +71,7 @@ long	ft_atol(const char *s)
 	return (number * sign);
 }
 
+//-----------------------------------------------------------------------------
 int	ft_isdigit(char c)
 {
 	if (c >= '0' && c <= '9')

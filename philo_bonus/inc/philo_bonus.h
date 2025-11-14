@@ -63,5 +63,6 @@ void	assign_start_time(t_data *all);
 //free_utils.c
 void	destroy_sems(t_data *all);
 void	free_all(t_data *all);
+void	ft_exit(t_data *all, int exit_code);
 
 #endif

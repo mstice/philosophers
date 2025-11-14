@@ -14,7 +14,6 @@
 
 //-----------------------------------------------------------------------------
 //initialises t_data struct
-//TODO: remove stop
 void	init_data(t_data *all)
 {
 	all->philos = NULL;

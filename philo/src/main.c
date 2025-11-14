@@ -20,9 +20,9 @@ int	main(int argc, char *argv[])
 	if (parse_input(argc, argv, &all))
 		return (1);
 	if (init_forks(&all) || init_philos(&all))
-		return (free_data(&all), 1);
+		return (free_all(&all), 1);
 	if (start_dinner(&all))
-		return (free_data(&all), 1);
-	free_data(&all);
+		return (free_all(&all), 1);
+	free_all(&all);
 	return (0);
 }

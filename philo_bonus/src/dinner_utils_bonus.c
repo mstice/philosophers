@@ -25,7 +25,7 @@ bool	alive(t_data *all, t_philo *philo)
 		ret = true;
 	sem_post(all->sem_meals);
 	if (ret == false)
-		exit(DEAD);
+		ft_exit(all, DEAD);
 	return (ret);
 }
 

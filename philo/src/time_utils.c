@@ -12,11 +12,15 @@
 
 #include "philo.h"
 
+//-----------------------------------------------------------------------------
+//how much time has passed since start time
 time_t	time_now(time_t start_time)
 {
 	return (time_ms() - start_time);
 }
 
+//-----------------------------------------------------------------------------
+//get time of day in ms since the Unix epoch
 time_t	time_ms(void)
 {
 	struct timeval	tv;
@@ -25,6 +29,8 @@ time_t	time_ms(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
+//-----------------------------------------------------------------------------
+//sleeps for x ms
 void	ms_sleep(size_t ms)
 {
 	size_t	start;
@@ -34,12 +40,16 @@ void	ms_sleep(size_t ms)
 		usleep (100);
 }
 
+//-----------------------------------------------------------------------------
+//delays the start of all threads
 void	start_delay(time_t start_time)
 {
 	while (time_ms() < start_time)
 		usleep(100);
 }
 
+//-----------------------------------------------------------------------------
+//assigns the start time of all threads
 void	assign_start_time(t_data *all)
 {
 	int	i;

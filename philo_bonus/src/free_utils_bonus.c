@@ -61,3 +61,12 @@ void	free_all(t_data *all)
 	free(all->pids);
 	free_philos(all);
 }
+
+//-----------------------------------------------------------------------------
+void	ft_exit(t_data *all, int exit_code)
+{
+	destroy_sems(all);
+	free(all->pids);
+	free_philos(all);
+	exit(exit_code);
+}

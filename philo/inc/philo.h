@@ -57,6 +57,6 @@ void	start_delay(time_t start_time);
 void	assign_start_time(t_data *all);
 
 //free_utils.c
-void	free_data(t_data *all);
+void	free_all(t_data *all);
 
 #endif

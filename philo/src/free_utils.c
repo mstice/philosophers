@@ -12,6 +12,7 @@
 
 #include "philo.h"
 
+//-----------------------------------------------------------------------------
 static void	destroy_m_cutlery(t_data *all)
 {
 	int	i;
@@ -22,6 +23,7 @@ static void	destroy_m_cutlery(t_data *all)
 	free(all->m_cutlery);
 }
 
+//-----------------------------------------------------------------------------
 static void	free_philos(t_data *all)
 {
 	int	i;
@@ -32,7 +34,8 @@ static void	free_philos(t_data *all)
 	free(all->philos);
 }
 
-void	free_data(t_data *all)
+//-----------------------------------------------------------------------------
+void	free_all(t_data *all)
 {
 	pthread_mutex_destroy(&(all->m_stop));
 	destroy_m_cutlery(all);

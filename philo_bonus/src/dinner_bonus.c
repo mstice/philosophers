@@ -52,7 +52,7 @@ static void	alone_routine(t_data *all, t_philo *which_philo)
 	print_output(all, which_philo, FORK);
 	ms_sleep(all->to_die);
 	sem_post(all->sem_cutlery);
-	exit(DEAD);
+	ft_exit(all, DEAD);
 }
 
 //-----------------------------------------------------------------------------
@@ -75,10 +75,10 @@ static void	philosopher_routine(t_data *all, t_philo *which_philo)
 		(print_output(all, which_philo, EAT), ms_sleep(all->to_eat));
 		(sem_post(all->sem_cutlery), sem_post(all->sem_cutlery));
 		if (enough_meals(all, which_philo))
-			exit(ENOUGH);
+			ft_exit(all, ENOUGH);
 		(print_output(all, which_philo, SLEEP), ms_sleep(all->to_sleep));
 	}
-	exit(EXIT_FAILURE);
+	ft_exit(all, EXIT_FAILURE);
 }
 
 //-----------------------------------------------------------------------------

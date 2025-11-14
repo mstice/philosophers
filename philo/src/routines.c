@@ -12,7 +12,9 @@
 
 #include "philo.h"
 
-static void	think_routine(t_data *all, t_philo *philo, bool silent)
+//-----------------------------------------------------------------------------
+//how long a philo should think for after sleeping before grabbing a fork
+static void	think_routine(t_data *all, t_philo *philo)
 {
 	time_t	time_to_think;
 
@@ -25,15 +27,13 @@ static void	think_routine(t_data *all, t_philo *philo, bool silent)
 	pthread_mutex_unlock (&(all->m_meals));
 	if (time_to_think <= 0)
 		time_to_think = 0;
-	if (time_to_think == 0 && silent == true)
-		time_to_think = 1;
 	if (time_to_think > 600)
 		time_to_think = 200;
-	if (!silent)
-		print_output(all, philo, THINK);
 	ms_sleep(time_to_think);
 }
 
+//-----------------------------------------------------------------------------
+//routine for the case where there is only one philo and one fork
 static void	alone_routine(t_data *all, t_philo *philo)
 {
 	start_delay(all->all_start);
@@ -68,12 +68,13 @@ static void	*philo_routine(void *arg)
 		pthread_mutex_unlock(philo->forks.left_f);
 		pthread_mutex_unlock(philo->forks.right_f);
 		(print_output(all, philo, SLEEP), ms_sleep(all->to_sleep));
-		think_routine(all, philo, false);
+		think_routine(all, philo);
 	}
 	return (NULL);
 }
 
 //-----------------------------------------------------------------------------
+//separate thread acts as a "waiter" checks if anyone died or finished eating
 static void	*waiter_routine(void *arg)
 {
 	t_data		*all;
@@ -118,9 +119,9 @@ int	start_dinner(t_data *all)
 				&philo_routine, all->philos[i]))
 			return (ft_putstr_fd(ERR_CREATE, 2), 1);
 	}
-	i = -1;
 	if (pthread_join(waiter, NULL))
 		return (ft_putstr_fd(ERR_JOIN, 2), 1);
+	i = -1;
 	while (++i < all->n_philo)
 	{
 		if (pthread_join(all->philos[i]->thread, NULL))
