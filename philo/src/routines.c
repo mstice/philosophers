@@ -28,7 +28,10 @@ static void	think_routine(t_data *all, t_philo *philo)
 	if (time_to_think <= 0)
 		time_to_think = 0;
 	if (time_to_think > 600)
+	{
 		time_to_think = 200;
+		print_output(all, philo, THINK);
+	}
 	ms_sleep(time_to_think);
 }
 

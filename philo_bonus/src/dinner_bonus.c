@@ -45,40 +45,39 @@ static void	*waiter_routine(void *arg)
 
 //-----------------------------------------------------------------------------
 //special routine for 1 philosopher 1 fork case
-static void	alone_routine(t_data *all, t_philo *which_philo)
+static void	alone_routine(t_data *all, t_philo *philo)
 {
 	start_delay(all->all_start);
 	sem_wait(all->sem_cutlery);
-	print_output(all, which_philo, FORK);
+	print_output(all, philo, FORK);
 	ms_sleep(all->to_die);
 	sem_post(all->sem_cutlery);
 	ft_exit(all, DEAD);
 }
 
 //-----------------------------------------------------------------------------
-static void	philosopher_routine(t_data *all, t_philo *which_philo)
+static void	philosopher_routine(t_data *all, t_philo *philo)
 {
 	if (all->n_philo == 1)
-		(alone_routine(all, which_philo));
+		(alone_routine(all, philo));
 	start_delay(all->all_start);
-	if (which_philo->index % 2)
+	if (philo->index % 2)
 	{
-		print_output(all, which_philo, THINK);
+		print_output(all, philo, THINK);
 		usleep(all->to_eat * 1000);
 	}
-	while (alive(all, which_philo))
+	while (alive(all, philo) && !enough_meals(all, philo))
 	{
-		(sem_wait(all->sem_cutlery), print_output(all, which_philo, FORK));
-		(sem_wait(all->sem_cutlery), print_output(all, which_philo, FORK));
-		which_philo->last_meal = time_ms();
-		which_philo->meals++;
-		(print_output(all, which_philo, EAT), ms_sleep(all->to_eat));
+		(sem_wait(all->sem_cutlery), print_output(all, philo, FORK));
+		(sem_wait(all->sem_cutlery), print_output(all, philo, FORK));
+		philo->last_meal = time_ms();
+		philo->meals++;
+		(print_output(all, philo, EAT), ms_sleep(all->to_eat));
 		(sem_post(all->sem_cutlery), sem_post(all->sem_cutlery));
-		if (enough_meals(all, which_philo))
-			ft_exit(all, ENOUGH);
-		(print_output(all, which_philo, SLEEP), ms_sleep(all->to_sleep));
+		(print_output(all, philo, SLEEP), ms_sleep(all->to_sleep));
+		print_output(all, philo, THINK);
 	}
-	ft_exit(all, EXIT_FAILURE);
+	ft_exit(all, ENOUGH);
 }
 
 //-----------------------------------------------------------------------------
