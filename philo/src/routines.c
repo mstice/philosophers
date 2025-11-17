@@ -58,8 +58,7 @@ static void	*philo_routine(void *arg)
 		return (alone_routine(all, philo), NULL);
 	start_delay(all->all_start);
 	if (philo->index % 2)
-		(print_output(all, philo, THINK),
-			usleep(all->to_eat * 1000 - (1000 * all->n_philo)));
+		(print_output(all, philo, THINK), usleep(all->to_eat * 1000));
 	while (alive(all))
 	{
 		pick_up_forks(all, philo);
@@ -100,7 +99,7 @@ static void	*waiter_routine(void *arg)
 			pthread_mutex_unlock(&(all->m_meals));
 			i++;
 		}
-		if (enough(all))
+		if (enough(all) || !alive(all))
 			return (stop(all), NULL);
 	}
 	return (NULL);
