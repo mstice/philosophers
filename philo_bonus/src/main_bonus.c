@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 17:57:35 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/10 20:31:14 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/18 16:30:35 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int	init_data(t_data *all)
 	all->to_sleep = 0;
 	all->must_eat = 0;
 	all->pids = NULL;
+	all->stop = false;
 	return (0);
 }
 

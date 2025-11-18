@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 10:20:30 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/10 20:31:28 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/18 20:06:34 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	destroy_sems(t_data *all)
 	sem_close(all->sem_output);
 	sem_unlink("/meals");
 	sem_close(all->sem_meals);
+	sem_unlink("/stop");
+	sem_close(all->sem_stop);
 }
 
 //-----------------------------------------------------------------------------
@@ -63,10 +65,17 @@ void	free_all(t_data *all)
 }
 
 //-----------------------------------------------------------------------------
-void	ft_exit(t_data *all, int exit_code)
+void	ft_exit(t_data *all, pthread_t *pwaiter, int exit_code)
 {
+	if (pthread_join(*pwaiter, NULL))
+	{
+		ft_putstr_fd(ERR_JOIN, 2);
+		exit_code = EXIT_FAILURE;
+	}
 	destroy_sems(all);
 	free(all->pids);
 	free_philos(all);
+	// if (exit_code == DEAD)
+	// 	kill_all(all);
 	exit(exit_code);
 }

@@ -23,7 +23,7 @@ OBJ := $(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
 INCLUDE := inc
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror -pthread -g3 -I$(INCLUDE) #-fsanitize=thread
+CFLAGS := -Wall -Wextra -Werror -pthread -I$(INCLUDE) #-fsanitize=thread
 
 RM := rm -rf
 

@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 17:45:32 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/11 11:53:05 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/18 16:29:49 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,10 @@ static int	init_sems(t_data *all)
 	all->sem_meals
 		= sem_open("/meals", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 1);
 	if (all->sem_meals == SEM_FAILED)
+		return (sem_error(all));
+	all->sem_stop
+		= sem_open("/stop", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 1);
+	if (all->sem_stop == SEM_FAILED)
 		return (sem_error(all));
 	return (0);
 }

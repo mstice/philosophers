@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 14:09:38 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/10 20:25:00 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/18 20:06:33 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef enum e_state
 typedef struct s_philo
 {
 	pthread_t		thread;
+	pthread_t		pwaiter;
 	int				index;
 	time_t			start_time;
 	time_t			last_meal;
@@ -55,6 +56,8 @@ typedef struct s_data
 	sem_t			*sem_cutlery;
 	sem_t			*sem_output;
 	sem_t			*sem_meals;
+	sem_t			*sem_stop;
+	bool			stop;
 }				t_data;
 
 #endif

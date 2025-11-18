@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 19:25:21 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/10 20:30:58 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/18 18:31:25 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int		start_dinner(t_data *all);
 //dinner_utils.c
 bool	alive(t_data *all, t_philo *philo);
 bool	enough_meals(t_data *all, t_philo *philo);
+int		dead_or_full(t_data *all, t_philo *philo);
 void	kill_all(t_data *all);
 void	print_output(t_data *all, t_philo *philo, t_state action);
 
@@ -63,6 +64,6 @@ void	assign_start_time(t_data *all);
 //free_utils.c
 void	destroy_sems(t_data *all);
 void	free_all(t_data *all);
-void	ft_exit(t_data *all, int exit_code);
+void	ft_exit(t_data *all, pthread_t *pwaiter, int exit_code);
 
 #endif

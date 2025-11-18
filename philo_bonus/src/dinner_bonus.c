@@ -6,7 +6,7 @@
 /*   By: mtice <mtice@student.42belgium.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 18:15:30 by mtice             #+#    #+#             */
-/*   Updated: 2025/11/13 17:08:45 by mtice            ###   ########.fr       */
+/*   Updated: 2025/11/18 20:06:37 by mtice            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,50 @@ static void	*waiter_routine(void *arg)
 				if (WEXITSTATUS(wstatus) == ENOUGH)
 					kill(all->pids[i], SIGKILL);
 				else if (WEXITSTATUS(wstatus) == DEAD)
-					return (print_output(all, all->philos[i], DEAD),
-						kill_all(all), NULL);
+					return (kill_all(all), NULL);
+				else if (WEXITSTATUS(wstatus) == EXIT_FAILURE)
+					return (ft_putstr_fd(ERR_EXIT, 2), kill_all(all), NULL);
 			}
 			i++;
 		}
+	}
+	return (NULL);
+}
+
+//-----------------------------------------------------------------------------
+static void	*pwaiter_routine(void *arg)
+{
+	t_philo	*philo;
+	t_data	*all;
+
+	philo = (t_philo *)arg;
+	all = philo->all;
+	start_delay(all->all_start);
+	while (42)
+	{
+		sem_wait(all->sem_meals);
+		if (time_ms() - philo->last_meal >= all->to_die)
+		{
+			sem_post(all->sem_meals);
+			print_output(all, philo, DEAD);
+			sem_wait(all->sem_stop);
+			all->stop = true;
+			sem_post(all->sem_stop);
+			return (NULL);
+		}
+		sem_post(all->sem_meals);
+		sem_wait(all->sem_meals);
+		if (all->must_eat > 0 && philo->meals >= all->must_eat)
+		{
+			sem_post(all->sem_meals);
+			sem_wait(all->sem_stop);
+			all->stop = true;
+			sem_post(all->sem_stop);
+			return (NULL);
+		}
+		sem_post(all->sem_meals);
+		usleep(100);
+		continue;
 	}
 	return (NULL);
 }
@@ -52,32 +91,31 @@ static void	alone_routine(t_data *all, t_philo *philo)
 	print_output(all, philo, FORK);
 	ms_sleep(all->to_die);
 	sem_post(all->sem_cutlery);
-	ft_exit(all, DEAD);
+	ft_exit(all, &(philo->pwaiter), DEAD);
 }
 
 //-----------------------------------------------------------------------------
 static void	philosopher_routine(t_data *all, t_philo *philo)
 {
+	if (pthread_create(&(philo->pwaiter), NULL, &pwaiter_routine, philo))
+		(ft_putstr_fd(ERR_CREATE, 2), ft_exit(all, &(philo->pwaiter), EXIT_FAILURE));
 	if (all->n_philo == 1)
 		(alone_routine(all, philo));
 	start_delay(all->all_start);
 	if (philo->index % 2)
-	{
-		print_output(all, philo, THINK);
-		usleep(all->to_eat * 1000);
-	}
-	while (alive(all, philo) && !enough_meals(all, philo))
+		(print_output(all, philo, THINK), usleep(all->to_eat * 1000));
+	while (42)
 	{
 		(sem_wait(all->sem_cutlery), print_output(all, philo, FORK));
 		(sem_wait(all->sem_cutlery), print_output(all, philo, FORK));
-		philo->last_meal = time_ms();
-		philo->meals++;
+		dead_or_full(all, philo);
+		(sem_wait(all->sem_meals), philo->last_meal = time_ms());
+		(philo->meals++, sem_post(all->sem_meals));
 		(print_output(all, philo, EAT), ms_sleep(all->to_eat));
 		(sem_post(all->sem_cutlery), sem_post(all->sem_cutlery));
 		(print_output(all, philo, SLEEP), ms_sleep(all->to_sleep));
 		print_output(all, philo, THINK);
 	}
-	ft_exit(all, ENOUGH);
 }
 
 //-----------------------------------------------------------------------------
