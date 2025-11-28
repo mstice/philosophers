@@ -75,7 +75,5 @@ void	ft_exit(t_data *all, pthread_t *pwaiter, int exit_code)
 	destroy_sems(all);
 	free(all->pids);
 	free_philos(all);
-	// if (exit_code == DEAD)
-	// 	kill_all(all);
 	exit(exit_code);
 }
