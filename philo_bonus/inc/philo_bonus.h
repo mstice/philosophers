@@ -42,9 +42,9 @@ int		parse_input(int argc, char *argv[], t_data *all);
 int		start_dinner(t_data *all);
 
 //dinner_utils.c
-bool	alive(t_data *all, t_philo *philo);
+void	alone_routine(t_data *all, t_philo *philo);
+bool	alive(t_data *all, t_philo *philo, bool philo_routine);
 bool	enough_meals(t_data *all, t_philo *philo);
-int		dead_or_full(t_data *all, t_philo *philo);
 void	kill_all(t_data *all);
 void	print_output(t_data *all, t_philo *philo, t_state action);
 

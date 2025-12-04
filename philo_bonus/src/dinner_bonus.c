@@ -55,50 +55,50 @@ static void	*pwaiter_routine(void *arg)
 	start_delay(all->all_start);
 	while (42)
 	{
-		sem_wait(all->sem_meals);
-		if (time_ms() - philo->last_meal >= all->to_die)
+		if (!alive(all, philo, false))
 		{
-			sem_post(all->sem_meals);
-			print_output(all, philo, DEAD);
+			(print_output(all, philo, DEAD), sem_wait(all->sem_stop));
+			all->stop = true;
+			sem_post(all->sem_stop);
+			return (NULL);
+		}
+		if (enough_meals(all, philo))
+		{
 			sem_wait(all->sem_stop);
 			all->stop = true;
 			sem_post(all->sem_stop);
 			return (NULL);
 		}
-		sem_post(all->sem_meals);
-		sem_wait(all->sem_meals);
-		if (all->must_eat > 0 && philo->meals >= all->must_eat)
-		{
-			sem_post(all->sem_meals);
-			sem_wait(all->sem_stop);
-			all->stop = true;
-			sem_post(all->sem_stop);
-			return (NULL);
-		}
-		sem_post(all->sem_meals);
 		usleep(100);
-		continue ;
 	}
 	return (NULL);
 }
 
 //-----------------------------------------------------------------------------
-//special routine for 1 philosopher 1 fork case
-static void	alone_routine(t_data *all, t_philo *philo)
+//how long a philo should think for after sleeping before grabbing a fork
+static void	think_routine(t_data *all, t_philo *philo)
 {
-	start_delay(all->all_start);
-	sem_wait(all->sem_cutlery);
-	print_output(all, philo, FORK);
-	ms_sleep(all->to_die);
-	sem_post(all->sem_cutlery);
-	ft_exit(all, &(philo->pwaiter), DEAD);
+	time_t	time_to_think;
+
+	sem_wait(all->sem_meals);
+	time_to_think
+		= (all->to_die - (time_ms() - philo->last_meal) - all->to_eat)
+		/ 2;
+	sem_post(all->sem_meals);
+	if (time_to_think <= 0)
+		time_to_think = 0;
+	if (time_to_think > 600)
+		time_to_think = 200;
+	print_output(all, philo, THINK);
+	ms_sleep(time_to_think);
 }
 
 //-----------------------------------------------------------------------------
+//eating, sleeping, thinking
 static void	philosopher_routine(t_data *all, t_philo *philo)
 {
 	if (pthread_create(&(philo->pwaiter), NULL, &pwaiter_routine, philo))
-		(ft_putstr_fd(ERR_CREATE, 2), ft_exit(all, &(philo->pwaiter), EXIT_FAILURE));
+		(ft_putstr_fd(ERR_CREATE, 2), ft_exit(all, &(philo->pwaiter), 1));
 	if (all->n_philo == 1)
 		(alone_routine(all, philo));
 	start_delay(all->all_start);
@@ -108,14 +108,15 @@ static void	philosopher_routine(t_data *all, t_philo *philo)
 	{
 		(sem_wait(all->sem_cutlery), print_output(all, philo, FORK));
 		(sem_wait(all->sem_cutlery), print_output(all, philo, FORK));
-		if (!alive(all, philo))
+		if (!alive(all, philo, true))
 			break ;
 		(sem_wait(all->sem_meals), philo->last_meal = time_ms());
-		(philo->meals++, sem_post(all->sem_meals));
+		philo->meals++;
+		sem_post(all->sem_meals);
 		(print_output(all, philo, EAT), ms_sleep(all->to_eat));
 		(sem_post(all->sem_cutlery), sem_post(all->sem_cutlery));
 		(print_output(all, philo, SLEEP), ms_sleep(all->to_sleep));
-		print_output(all, philo, THINK);
+		think_routine(all, philo);
 	}
 	if (enough_meals(all, philo))
 		ft_exit(all, &(philo->pwaiter), ENOUGH);

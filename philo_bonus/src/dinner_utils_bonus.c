@@ -13,8 +13,21 @@
 #include "philo_bonus.h"
 
 //-----------------------------------------------------------------------------
+//special routine for 1 philosopher 1 fork case
+void	alone_routine(t_data *all, t_philo *philo)
+{
+	start_delay(all->all_start);
+	sem_wait(all->sem_cutlery);
+	print_output(all, philo, FORK);
+	ms_sleep(all->to_die);
+	sem_post(all->sem_cutlery);
+	ft_exit(all, &(philo->pwaiter), DEAD);
+}
+
+//-----------------------------------------------------------------------------
 //checks whether a philo is alive
-bool	alive(t_data *all, t_philo *philo)
+//bool philo_routine: true if the check comes from the philo_routine
+bool	alive(t_data *all, t_philo *philo, bool philo_routine)
 {
 	bool	ret;
 
@@ -24,7 +37,7 @@ bool	alive(t_data *all, t_philo *philo)
 	else
 		ret = true;
 	sem_post(all->sem_meals);
-	if (ret == false)
+	if (ret == false && philo_routine == true)
 	{
 		sem_post(all->sem_cutlery);
 		sem_post(all->sem_cutlery);
