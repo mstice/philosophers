@@ -1,8 +1,9 @@
 # Philosophers
-Grade achieved: 125% ✅
-
+Grade achieved: 121% ✅
+>[!NOTE]
+>Small bug was fixed right after the evaluation  
 ## ℹ️Description
-Subject: Concurrent Programming
+**Subject: Concurrent Programming**
 - Using threads, mutexes, semaphores and forks, I solve the well-known "Dining Philosophers Problem"
 - Philosophers must eat, sleep and think. If a philosopher does not eat for long, it dies.
 - There are as many forks as philosophers, but philosophers need two forks🍴 to eat.
@@ -14,13 +15,9 @@ Subject: Concurrent Programming
 ### 🏆Bonus Section:
 - Using forks() and semaphores, I create a routine where each philosopher is represented by a fork() and forks🍴 are semaphores
 
-## ⬇️ Installation
-```bash
-sudo apt install cmake
-```
 
 ## 🛠️ Usage
-```cmake
+```bash
 cd philo
 make
 ./philo <time to die> <time to eat> <time to sleep> (optional) <times each philo must eat>
@@ -29,3 +26,4 @@ make
 
 ## 👥 Author
 Matilda Tice (42: mtice, Github: mstice)  
+<sub>Cover image by [Ayogun](https://github.com/ayogun/42-project-badges)</sub>
